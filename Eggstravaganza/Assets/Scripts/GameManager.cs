@@ -29,10 +29,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameData.Players.Add(0, new PlayerData(0, "Player 0"));
-        GameData.Players.Add(1, new PlayerData(1, "Player 1"));
-        GameData.Players.Add(2, new PlayerData(2, "Player 2"));
-        GameData.Players.Add(3, new PlayerData(3, "Player 3"));
+        // GameData.Players.Add(0, new PlayerData(0, "Player 0"));
+        // GameData.Players.Add(1, new PlayerData(1, "Player 1"));
+        // GameData.Players.Add(2, new PlayerData(2, "Player 2"));
+        // GameData.Players.Add(3, new PlayerData(3, "Player 3"));
     }
 
     // Update is called once per frame
@@ -40,27 +40,27 @@ public class GameManager : MonoBehaviour
     {
         DecrementGameTime();
 
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            GameData.IncrementPlayerScore(0, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            GameData.IncrementPlayerScore(1, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            GameData.IncrementPlayerScore(2, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            GameData.IncrementPlayerScore(3, 1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            EndRound();
-        }
+        // if (Input.GetKeyDown(KeyCode.Alpha1))
+        // {
+        //     GameData.IncrementPlayerScore(0, 1);
+        // }
+        // if (Input.GetKeyDown(KeyCode.Alpha2))
+        // {
+        //     GameData.IncrementPlayerScore(1, 1);
+        // }
+        // if (Input.GetKeyDown(KeyCode.Alpha3))
+        // {
+        //     GameData.IncrementPlayerScore(2, 1);
+        // }
+        // if (Input.GetKeyDown(KeyCode.Alpha4))
+        // {
+        //     GameData.IncrementPlayerScore(3, 1);
+        // }
+        //
+        // if (Input.GetKeyDown(KeyCode.Escape))
+        // {
+        //     EndRound();
+        // }
     }
 
     void DecrementGameTime()

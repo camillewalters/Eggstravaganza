@@ -13,7 +13,3 @@ MonoBehaviour:
   m_Name: GameData
   m_EditorClassIdentifier: 
   InitialTimer: 120
-  Player0Score: 0
-  Player1Score: 0
-  Player2Score: 0
-  Player3Score: 0
