@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -21,6 +23,11 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI[] PlayerScores;
     
+    static readonly Dictionary<int, string> PlaceToPlacement = new Dictionary<int, string>()
+    {
+        { 0, "1st" }, { 1, "2nd" }, { 2, "3rd" }, { 3, "4th" }
+    };
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +59,35 @@ public class UIManager : MonoBehaviour
 
     void PopulateResults()
     {
-        // TODO
+        var parent = ResultsPanel.transform.Find("Results").transform;
+        var sorted = GameData.Players.OrderByDescending(i => i.Value.Score);
+        var count = 0;
+        var prevScore = -1;
+        var prevPlacement = "";
+        foreach (var entry in sorted)
+        {
+            var place = parent.GetChild(count);
+            var placementText = place.Find("Placement").GetComponent<TextMeshProUGUI>();
+            if (count > 0)
+            {
+                if (entry.Value.Score == prevScore)
+                {
+                    placementText.SetText(prevPlacement);
+                }
+                else
+                {
+                    placementText.SetText(PlaceToPlacement[count]);
+                }
+            }
+            else
+            {
+                placementText.SetText("1st");
+            }
+            place.Find("Name").GetComponent<TextMeshProUGUI>().SetText(entry.Value.Name);
+            place.Find("Score").GetComponent<TextMeshProUGUI>().SetText(entry.Value.Score.ToString());
+            count++;
+            prevScore = entry.Value.Score;
+            prevPlacement = placementText.text;
+        }
     }
 }
