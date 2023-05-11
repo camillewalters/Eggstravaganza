@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-[System.Serializable]
+[Serializable]
 public class Egg
 {
     public GameObject prefab;
@@ -17,59 +17,24 @@ public class EggSpawn : MonoBehaviour
 {
     public List<Egg> eggs;
     
-    // Timer to track time between spawns
-    public float timeRemaining;
-    public bool timerIsRunning;
-    
-    Egg m_CurrentSpawnChoice;
     double m_AccumulatedWeights;
     System.Random m_Rand = new();
-    const float k_SpawnInterval = 20;
 
     void Awake()
     {
         CalculateWeights();
     }
 
-    void Start()
+    public void SpawnEgg()
     {
-        m_CurrentSpawnChoice = eggs[ChooseEggToSpawn()];
+        var currentEggToSpawn = eggs[ChooseEggToSpawn()];
         
-        timeRemaining = k_SpawnInterval;
-        timerIsRunning = true;
-    }
-
-    void Update()
-    {
-        if (timerIsRunning)
-        {
-            if (timeRemaining > 0)
-            {
-                timeRemaining -= Time.fixedDeltaTime;
-            }
-            else
-            {
-                Debug.Log($"Spawning {m_CurrentSpawnChoice.prefab.name} now!");
-                SpawnEgg();
-                
-                m_CurrentSpawnChoice = null;
-                timeRemaining = 0;
-                timerIsRunning = false;
-            }
-        }
-        else
-        {
-            m_CurrentSpawnChoice = eggs[ChooseEggToSpawn()];
-            timeRemaining = k_SpawnInterval;
-            timerIsRunning = true;
-        }
-    }
-
-    void SpawnEgg()
-    {
+        // TODO: Maybe modify spawn height? Not sure what value we'd want yet
         var randomPosition = Random.insideUnitCircle;
         var spawnPosition = new Vector3(randomPosition.x, 2, randomPosition.y);
-        Instantiate(m_CurrentSpawnChoice.prefab, spawnPosition, Quaternion.identity);
+        Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
+        
+        Debug.Log($"Spawned {currentEggToSpawn.prefab.name} now!");
     }
 
     int ChooseEggToSpawn()
@@ -92,7 +57,41 @@ public class EggSpawn : MonoBehaviour
         {
             m_AccumulatedWeights += egg.chance;
             egg.weight = m_AccumulatedWeights;
-            Debug.Log($"{egg.prefab.name} and {egg.weight}");
         }
     }
+    
+    // TODO: Uncomment this only for testing purposes, delete and call SpawnEgg() in GameManager instead after it is created 
+    /*
+    public float timeRemaining;
+    public bool timerIsRunning;
+    const float k_SpawnInterval = 20;
+
+    void Start()
+    {
+        timeRemaining = k_SpawnInterval;
+        timerIsRunning = true;
+    }
+
+    void Update()
+    {
+        if (timerIsRunning)
+        {
+            if (timeRemaining > 0)
+            {
+                timeRemaining -= Time.fixedDeltaTime;
+            }
+            else
+            {
+                SpawnEgg();
+                timeRemaining = 0;
+                timerIsRunning = false;
+            }
+        }
+        else
+        {
+            timeRemaining = k_SpawnInterval;
+            timerIsRunning = true;
+        }
+    }
+    */
 }

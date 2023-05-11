@@ -601,7 +601,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1963728486
+--- !u!1 &858244811
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -609,8 +609,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1963728488}
-  - component: {fileID: 1963728487}
+  - component: {fileID: 858244813}
+  - component: {fileID: 858244812}
   m_Layer: 0
   m_Name: TempGameManager
   m_TagString: Untagged
@@ -618,13 +618,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1963728487
+--- !u!114 &858244812
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1963728486}
+  m_GameObject: {fileID: 858244811}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5bb152eeefb142b4ba3247598b5d14aa, type: 3}
@@ -633,7 +633,7 @@ MonoBehaviour:
   eggs:
   - prefab: {fileID: 6045677848563783273, guid: 60c2aa6cfe0f5414e9a357275d37e6c3,
       type: 3}
-    chance: 20
+    chance: 30
     weight: 0
   - prefab: {fileID: 2788923454540253015, guid: 588a50506e140dd4ebf64dcd966efde7,
       type: 3}
@@ -641,15 +641,15 @@ MonoBehaviour:
     weight: 0
   timeRemaining: 0
   timerIsRunning: 0
---- !u!4 &1963728488
+--- !u!4 &858244813
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1963728486}
+  m_GameObject: {fileID: 858244811}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2.8843203, y: -0.15484369, z: -1.760704}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
