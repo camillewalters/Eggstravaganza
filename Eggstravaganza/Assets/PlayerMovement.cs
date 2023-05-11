@@ -17,13 +17,13 @@ public class PlayerMovement : MonoBehaviour
 
         transform.Translate(movement * speed * Time.deltaTime);
 
-        //turn towards direction of movement, might not want this? idk really how it works?
-        if (movement != Vector3.zero)
-        {
-            Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
-            body.rotation = Quaternion.Lerp(body.rotation, toRotation, Time.deltaTime * 10f);
-            //Debug.Log("rotate: " + body.rotation);
-        }
+        ////turn towards direction of movement, might not want this? idk really how it works?
+        //if (movement != Vector3.zero)
+        //{
+        //    Quaternion toRotation = Quaternion.LookRotation(movement, Vector3.up);
+        //    body.rotation = Quaternion.Lerp(body.rotation, toRotation, Time.deltaTime * 10f);
+        //    //Debug.Log("rotate: " + body.rotation);
+        //}
 
         float shootHorizontal = Input.GetAxis("Mouse X");
         float shootVertical = Input.GetAxis("Mouse Y");
