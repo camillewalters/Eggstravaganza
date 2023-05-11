@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 62478661d5d031d4fb94daa7f129ed7a
+guid: 1be7648c944e98c4a8a6c65bd2bb4690
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GoldenEggMat
+    second: {fileID: 2100000, guid: 2095b45b6e096c941ba667987dd26218, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

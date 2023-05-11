@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: ec1700f95b675e24ea4415645cfe72f4
+guid: 8e4f98c8a44097544adba273c81e7993
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: EggMat
+    second: {fileID: 2100000, guid: 4a37d468f7ff7f2419cf60c7f518893f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
