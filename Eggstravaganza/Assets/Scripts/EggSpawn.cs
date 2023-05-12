@@ -64,7 +64,7 @@ public class EggSpawn : MonoBehaviour
     }
     
     // TODO: Uncomment this only for testing purposes, delete and call SpawnEgg() in GameManager instead after it is created 
-    
+    /*
     public float timeRemaining;
     public bool timerIsRunning;
     const float k_SpawnInterval = 20;
@@ -96,5 +96,5 @@ public class EggSpawn : MonoBehaviour
             timerIsRunning = true;
         }
     }
-    
+    */
 }
