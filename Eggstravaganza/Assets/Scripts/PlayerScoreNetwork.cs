@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -9,16 +10,13 @@ public class PlayerScoreNetwork : NetworkBehaviour
     GameDataScriptableObject GameData;
 
     readonly NetworkVariable<PlayerScoreData> m_Score = new(writePerm: NetworkVariableWritePermission.Owner);
-    
+
     public override void OnNetworkSpawn()
     {
-        Debug.Log($"My client ID is {NetworkManager.LocalClientId}");
-    }
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        var localID = (int)NetworkManager.LocalClientId;
+        Debug.Log($"My client ID is {localID}");
+        // TODO: move this elsewhere
+        // GameManager.Instance.RegisterNewPlayer(localID);
     }
 
     // Update is called once per frame

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameManager : NetworkBehaviour
 {
-    // TODO: add game states
     static GameManager m_Instance;
     public static GameManager Instance => m_Instance;
 
@@ -29,14 +28,18 @@ public class GameManager : NetworkBehaviour
         // DEBUG
         GameData.Players.Add(0, new PlayerData(0, "Player 0"));
         GameData.Players.Add(1, new PlayerData(1, "Player 1"));
-        // GameData.Players.Add(2, new PlayerData(2, "Player 2"));
-        // GameData.Players.Add(3, new PlayerData(3, "Player 3"));
+    }
+
+    public void RegisterNewPlayer(int id)
+    {
+        GameData.Players.TryAdd(id, new PlayerData(id, $"Player {id}"));
+        UIManager.RegisterNewPlayer(id);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame

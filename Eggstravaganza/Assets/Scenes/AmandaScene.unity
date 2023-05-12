@@ -1638,7 +1638,7 @@ MonoBehaviour:
   ResultsPanel: {fileID: 114616221}
   GameData: {fileID: 11400000, guid: 610a9111475b5b030a18afcee12ac774, type: 2}
   TimerText: {fileID: 1373648344}
-  PlayerScores:
+  m_PlayerScores:
   - {fileID: 1883273113}
   - {fileID: 1367687029}
   - {fileID: 473270447}

@@ -21,28 +21,38 @@ public class UIManager : MonoBehaviour
     TextMeshProUGUI TimerText;
 
     [SerializeField]
-    TextMeshProUGUI[] PlayerScores;
+    TextMeshProUGUI[] m_PlayerScores;
+
+    // readonly bool[] m_HasRegistered = {false, false, false, false};
     
-    static readonly Dictionary<int, string> PlaceToPlacement = new Dictionary<int, string>()
+    static readonly Dictionary<int, string> PlaceToPlacement = new Dictionary<int, string>
     {
         { 0, "1st" }, { 1, "2nd" }, { 2, "3rd" }, { 3, "4th" }
     };
 
-    // Start is called before the first frame update
     void Start()
     {
         foreach (var player in GameData.Players)
         {
-            PlayerScores[player.Key].SetText("0");
-            GameData.Players[player.Key].OnScoreChange += (newVal) => { PlayerScores[player.Key].SetText(newVal.ToString()); }; 
+            RegisterNewPlayer(player.Key);
+        }
+    }
+    
+    public void RegisterNewPlayer(int id)
+    {
+        // TODO: remove inactive player scores on game start
+        foreach (var player in GameData.Players)
+        {
+            m_PlayerScores[player.Key].SetText("0");
+            GameData.Players[player.Key].OnScoreChange += (newVal) => { m_PlayerScores[player.Key].SetText(newVal.ToString()); }; 
         }
 
         for (int i = GameData.Players.Count; i < Utils.k_MaxPlayers; i++)
         {
-            PlayerScores[i].gameObject.SetActive(false);
+            m_PlayerScores[i].gameObject.SetActive(false);
         }
     }
-
+    
     // Update is called once per frame
     void Update()
     {
