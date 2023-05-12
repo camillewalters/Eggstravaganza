@@ -18,8 +18,13 @@ public class GameDataScriptableObject : ScriptableObject, ISerializationCallback
 
     public void OnBeforeSerialize() { }
 
-    public void IncrementPlayerScore(int id, int amt)
+    // public void IncrementPlayerScore(int id, int amt)
+    // {
+    //     Players[id].Score += amt;
+    // }
+
+    public void UpdatePlayerScores(int id, int newScore)
     {
-        Players[id].Score += amt;
+        Players[id].Score = newScore;
     }
 }

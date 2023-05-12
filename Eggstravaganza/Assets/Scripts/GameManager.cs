@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GameManager : NetworkBehaviour
 {
-    // // TODO: add game states
-    // static GameManager m_Instance;
-    // public static GameManager Instance => m_Instance;
+    // TODO: add game states
+    static GameManager m_Instance;
+    public static GameManager Instance => m_Instance;
 
     [SerializeField]
     GameDataScriptableObject GameData;
@@ -14,18 +14,18 @@ public class GameManager : NetworkBehaviour
     [SerializeField] 
     UIManager UIManager;
 
-    // void Awake()
-    // {
-    //     if (m_Instance != null && m_Instance != this)
-    //     {
-    //         Debug.LogError("Multiple GameManagers in scene!");
-    //         enabled = false;
-    //     }
-    //     else
-    //     {
-    //         m_Instance = this;
-    //     }
-    // }
+    void Awake()
+    {
+        if (m_Instance != null && m_Instance != this)
+        {
+            Debug.LogError("Multiple GameManagers in scene!");
+            enabled = false;
+        }
+        else
+        {
+            m_Instance = this;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -40,30 +40,7 @@ public class GameManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        // DecrementGameTime();
-
-        // DEBUG
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            GameData.IncrementPlayerScore(0, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            GameData.IncrementPlayerScore(1, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            GameData.IncrementPlayerScore(2, 1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            GameData.IncrementPlayerScore(3, 1);
-        }
         
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            EndRound();
-        }
     }
 
     public void EndRound()

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ public class GameNetwork : NetworkBehaviour
     GameDataScriptableObject GameData;
 
     readonly NetworkVariable<float> m_GameTimer = new(writePerm: NetworkVariableWritePermission.Owner);
+    // TODO: turn into INetworkVariable....
+    readonly NetworkVariable<Dictionary<int, PlayerData>> m_Players = new();
 
     void Awake()
     {
@@ -20,6 +23,28 @@ public class GameNetwork : NetworkBehaviour
     void Update()
     {
         DecrementGameTime();
+        // DEBUG
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            IncrementPlayerScore(0, 1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            IncrementPlayerScore(1, 1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            IncrementPlayerScore(2, 1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            IncrementPlayerScore(3, 1);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GameManager.EndRound();
+        }
     }
     
     void DecrementGameTime()
@@ -37,5 +62,14 @@ public class GameNetwork : NetworkBehaviour
             }
         }
         GameData.RuntimeTimer = m_GameTimer.Value;
+    }
+
+    void IncrementPlayerScore(int id, int amt)
+    {
+        if (IsOwner)
+        {
+            m_Players.Value[id].Score += amt;
+        }
+        GameData.UpdatePlayerScores(id, m_Players.Value[id].Score);
     }
 }
