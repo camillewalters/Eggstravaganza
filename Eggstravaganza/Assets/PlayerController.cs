@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
     public Transform body;
@@ -13,6 +13,11 @@ public class PlayerMovement : MonoBehaviour
     private InputAction move;
     private InputAction interact;
     private InputAction look;
+
+    public int[] eggInventory; //temporarily using an int, use Egg class later
+
+    private float stunTime = 1.5f;
+    bool isStunned = false;
 
     private void Awake()
     {
@@ -40,6 +45,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (!isStunned)
+        {
+            Move();
+        }
+    }
+
+    private void Move()
+    {
         Vector2 movementDirection = move.ReadValue<Vector2>();
         Vector3 movement = new Vector3(movementDirection.x, 0f, movementDirection.y);
         movement.Normalize();
@@ -57,12 +70,30 @@ public class PlayerMovement : MonoBehaviour
             Quaternion toRotation = Quaternion.LookRotation(rotation, Vector3.up);
             body.rotation = Quaternion.Lerp(body.rotation, toRotation, Time.deltaTime * 10f);
         }
-
     }
 
     private void Interact (InputAction.CallbackContext context)
     {
-        Debug.Log("we interacted");//whatever picking up/throwing egg logic we want here
+        Debug.Log("we interacted");
     }
 
+    private void ThrowEgg()
+    {
+        //implement later
+    }
+
+    private void PickUpEgg()
+    {
+        //add egg to inventory
+    }
+
+    private IEnumerator LoseEgg()
+    {
+        //remove egg from inventory
+
+        //gets stunned
+        isStunned = true;
+        yield return new WaitForSeconds(stunTime);
+        isStunned = false;
+    }
 }
