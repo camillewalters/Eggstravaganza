@@ -17,6 +17,9 @@ public class EggSpawn : MonoBehaviour
 {
     [SerializeField]
     List<Egg> eggs;
+
+    [SerializeField]
+    float spawnAreaScale = 1;
     
     double m_AccumulatedWeights;
     System.Random m_Rand = new();
@@ -31,7 +34,7 @@ public class EggSpawn : MonoBehaviour
         var currentEggToSpawn = eggs[ChooseEggToSpawn()];
         
         // TODO: Maybe modify spawn height? Not sure what value we'd want yet
-        var randomPosition = Random.insideUnitCircle;
+        var randomPosition = Random.insideUnitCircle * spawnAreaScale;
         var spawnPosition = new Vector3(randomPosition.x, 2, randomPosition.y);
         Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
         
@@ -61,7 +64,7 @@ public class EggSpawn : MonoBehaviour
     }
     
     // TODO: Uncomment this only for testing purposes, delete and call SpawnEgg() in GameManager instead after it is created 
-    /*
+    
     public float timeRemaining;
     public bool timerIsRunning;
     const float k_SpawnInterval = 20;
@@ -93,5 +96,5 @@ public class EggSpawn : MonoBehaviour
             timerIsRunning = true;
         }
     }
-    */
+    
 }
