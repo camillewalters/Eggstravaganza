@@ -37,7 +37,7 @@ public class UIManager : MonoBehaviour
             GameData.Players[player.Key].OnScoreChange += (newVal) => { PlayerScores[player.Key].SetText(newVal.ToString()); }; 
         }
 
-        for (int i = GameData.Players.Count; i < 4; i++)
+        for (int i = GameData.Players.Count; i < Utils.k_MaxPlayers; i++)
         {
             PlayerScores[i].gameObject.SetActive(false);
         }
@@ -64,6 +64,8 @@ public class UIManager : MonoBehaviour
         var count = 0;
         var prevScore = -1;
         var prevPlacement = "";
+        
+        // Populate text results
         foreach (var entry in sorted)
         {
             var place = parent.GetChild(count);
@@ -88,6 +90,13 @@ public class UIManager : MonoBehaviour
             count++;
             prevScore = entry.Value.Score;
             prevPlacement = placementText.text;
+        }
+
+        // Deactivate inactive players
+        for (int i = count; i < Utils.k_MaxPlayers; i++)
+        {
+            var place = parent.GetChild(i);
+            place.gameObject.SetActive(false);
         }
     }
 }

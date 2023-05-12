@@ -1,11 +1,12 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
-    private static GameManager m_Instance;
-
-    public static GameManager Instance => m_Instance;
+    // // TODO: add game states
+    // static GameManager m_Instance;
+    // public static GameManager Instance => m_Instance;
 
     [SerializeField]
     GameDataScriptableObject GameData;
@@ -13,24 +14,25 @@ public class GameManager : MonoBehaviour
     [SerializeField] 
     UIManager UIManager;
 
-    void Awake()
-    {
-        if (m_Instance != null && m_Instance != this)
-        {
-            Debug.LogError("Multiple GameManagers in scene!");
-            Destroy(gameObject);
-        }
-        else
-        {
-            m_Instance = this;
-        }
-    }
+    // void Awake()
+    // {
+    //     if (m_Instance != null && m_Instance != this)
+    //     {
+    //         Debug.LogError("Multiple GameManagers in scene!");
+    //         enabled = false;
+    //     }
+    //     else
+    //     {
+    //         m_Instance = this;
+    //     }
+    // }
 
     // Start is called before the first frame update
     void Start()
     {
-        // GameData.Players.Add(0, new PlayerData(0, "Player 0"));
-        // GameData.Players.Add(1, new PlayerData(1, "Player 1"));
+        // DEBUG
+        GameData.Players.Add(0, new PlayerData(0, "Player 0"));
+        GameData.Players.Add(1, new PlayerData(1, "Player 1"));
         // GameData.Players.Add(2, new PlayerData(2, "Player 2"));
         // GameData.Players.Add(3, new PlayerData(3, "Player 3"));
     }
@@ -38,44 +40,33 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DecrementGameTime();
+        // DecrementGameTime();
 
-        // if (Input.GetKeyDown(KeyCode.Alpha1))
-        // {
-        //     GameData.IncrementPlayerScore(0, 1);
-        // }
-        // if (Input.GetKeyDown(KeyCode.Alpha2))
-        // {
-        //     GameData.IncrementPlayerScore(1, 1);
-        // }
-        // if (Input.GetKeyDown(KeyCode.Alpha3))
-        // {
-        //     GameData.IncrementPlayerScore(2, 1);
-        // }
-        // if (Input.GetKeyDown(KeyCode.Alpha4))
-        // {
-        //     GameData.IncrementPlayerScore(3, 1);
-        // }
-        //
-        // if (Input.GetKeyDown(KeyCode.Escape))
-        // {
-        //     EndRound();
-        // }
-    }
-
-    void DecrementGameTime()
-    {
-        if (GameData.RuntimeTimer > 0)
+        // DEBUG
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            GameData.RuntimeTimer -= Time.deltaTime;
+            GameData.IncrementPlayerScore(0, 1);
         }
-        else 
+        if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            EndRound();    
+            GameData.IncrementPlayerScore(1, 1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            GameData.IncrementPlayerScore(2, 1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            GameData.IncrementPlayerScore(3, 1);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            EndRound();
         }
     }
 
-    void EndRound()
+    public void EndRound()
     {
         UIManager.EndGame();
     }

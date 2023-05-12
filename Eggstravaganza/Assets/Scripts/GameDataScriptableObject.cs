@@ -13,7 +13,7 @@ public class GameDataScriptableObject : ScriptableObject, ISerializationCallback
 
     public void OnAfterDeserialize()
     {
-        RuntimeTimer = InitialTimer;
+        
     }
 
     public void OnBeforeSerialize() { }
