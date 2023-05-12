@@ -23,13 +23,5 @@ public class GameDataScriptableObject : ScriptableObject, ISerializationCallback
     {
         var id = (int)scoreData.ID;
         Players[id].Score = (int)scoreData.Score;
-        Debug.Log($"updating player score, id is {id}, score is now {Players[id].Score}");
     }
-    
-    public void UpdatePlayerScore(int id, int amt)
-    {
-        Players[id].Score = amt;
-    }
-
-    public int GetPlayerScore(int id) => Players[id].Score;
 }

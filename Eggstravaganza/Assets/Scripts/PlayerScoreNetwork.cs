@@ -29,11 +29,16 @@ public class PlayerScoreNetwork : NetworkBehaviour
         {
             IncrementPlayerScore(1);
         }
+
+        // TODO: take this out of update loop
+        if (!IsOwner)
+        {
+            GameData.UpdatePlayerScore(m_Score.Value);
+        }
     }
     
     void IncrementPlayerScore(int amt)
     {
-        var localID = (int)NetworkManager.LocalClientId;
         if (IsOwner)
         {
             m_Score.Value = new PlayerScoreData()
@@ -45,16 +50,8 @@ public class PlayerScoreNetwork : NetworkBehaviour
         }
         else
         {
-            for (int i = 0; i < GameData.NumPlayers; i++)
-            {
-                if (GameData.Players[i].ID != localID)
-                {
-                    GameData.UpdatePlayerScore(i, GameData.GetPlayerScore(localID) + amt);
-                }
-            }
+            GameData.UpdatePlayerScore(m_Score.Value);
         }
-        
-        
     }
 
     public struct PlayerScoreData : INetworkSerializable
