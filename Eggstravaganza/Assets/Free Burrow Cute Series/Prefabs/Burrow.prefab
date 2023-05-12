@@ -322,7 +322,7 @@ GameObject:
   - component: {fileID: 3361834574544056098}
   - component: {fileID: 8667052616836904280}
   m_Layer: 0
-  m_Name: Free Burrow
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
