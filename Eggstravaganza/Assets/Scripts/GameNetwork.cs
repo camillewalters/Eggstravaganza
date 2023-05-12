@@ -13,13 +13,40 @@ public class GameNetwork : NetworkBehaviour
     GameDataScriptableObject GameData;
 
     readonly NetworkVariable<float> m_GameTimer = new(writePerm: NetworkVariableWritePermission.Server);
+    readonly NetworkVariable<GameState> m_GameState = new(writePerm: NetworkVariableWritePermission.Server);
 
     void Awake()
     {
         m_GameTimer.Value = GameData.InitialTimer;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        // TODO: fix initial state
+        m_GameState.Value = GameState.Playing;
+        m_GameState.OnValueChanged += OnStateChange;
+    }
     
+    void OnStateChange(GameState prev, GameState next)
+    {
+        Debug.Log($"Game state changed from {prev} to {next}");
+        switch (next)
+        {
+            case GameState.Start:
+                break;
+            case GameState.Lobby:
+                break;
+            case GameState.Playing:
+                break;
+            case GameState.Pause:
+                break;
+            case GameState.EndRound:
+                GameManager.EndRound();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(next), next, null);
+        }
+    }
 
     void Update()
     {
@@ -28,7 +55,7 @@ public class GameNetwork : NetworkBehaviour
         // DEBUG
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            GameManager.EndRound();
+            EndRound();
         }
     }
     
@@ -47,5 +74,13 @@ public class GameNetwork : NetworkBehaviour
             }
         }
         GameData.RuntimeTimer = m_GameTimer.Value;
+    }
+
+    void EndRound()
+    {
+        if (IsOwner)
+        {
+            m_GameState.Value = GameState.EndRound;
+        }
     }
 }
