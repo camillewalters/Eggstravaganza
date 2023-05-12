@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
+    public float lerpParam = 10f;
     public Transform body;
 
     public PlayerInputActions playerControls;
@@ -25,22 +26,18 @@ public class PlayerController : MonoBehaviour
     }
     private void OnEnable()
     {
+        playerControls.Player.Enable();
         move = playerControls.Player.Move;
-        move.Enable();
 
         interact = playerControls.Player.Fire;
-        interact.Enable();
         interact.performed += Interact;
 
         look = playerControls.Player.Look;
-        look.Enable();
-
     }
     private void OnDisable()
     {
-        move.Disable();
-        interact.Disable();
-        look.Disable();
+        playerControls?.Player.Disable();
+        interact.performed -= Interact;
     }
 
     private void Update()
@@ -68,7 +65,7 @@ public class PlayerController : MonoBehaviour
         if (rotation != Vector3.zero)
         {
             Quaternion toRotation = Quaternion.LookRotation(rotation, Vector3.up);
-            body.rotation = Quaternion.Lerp(body.rotation, toRotation, Time.deltaTime * 10f);
+            body.rotation = Quaternion.Lerp(body.rotation, toRotation, Time.deltaTime * lerpParam);
         }
     }
 
