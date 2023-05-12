@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
 
     private InputAction move;
     private InputAction interact;
-    private InputAction look;
+    private Vector2 lookValue;
 
     public int[] eggInventory; //temporarily using an int, use Egg class later
 
@@ -33,12 +33,15 @@ public class PlayerController : MonoBehaviour
         interact = playerControls.Player.Fire;
         interact.performed += Interact;
 
-        look = playerControls.Player.Look;
+        playerControls.Player.Look.performed += LookPerformed;
+        //look = playerControls.Player.Look;
     }
     private void OnDisable()
     {
         playerControls?.Player.Disable();
         interact.performed -= Interact;
+        playerControls.Player.Look.performed -= LookPerformed;
+
     }
 
     private void Update()
@@ -46,6 +49,26 @@ public class PlayerController : MonoBehaviour
         if (!isStunned)
         {
             Move();
+        }
+    }
+
+    private void LookPerformed(InputAction.CallbackContext context)
+    {
+        lookValue = context.ReadValue<Vector2>();
+
+        if (context.control.device.ToString() == "Mouse:/Mouse")
+        {
+            Ray ray = Camera.main.ScreenPointToRay(lookValue);
+            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+            float rayDistance;
+
+            if (groundPlane.Raycast(ray, out rayDistance))
+            {
+                Vector3 point = ray.GetPoint(rayDistance); 
+                Vector3 lookDirection = (point - transform.position).normalized;
+                lookValue = new Vector2(lookDirection.x, lookDirection.z);
+            }
+            
         }
     }
 
@@ -58,8 +81,7 @@ public class PlayerController : MonoBehaviour
         //Move the player
         transform.position = transform.position + movement * speed * Time.deltaTime;
 
-        Vector2 lookDirection = look.ReadValue<Vector2>();
-        Vector3 rotation = new Vector3(lookDirection.x, 0f, lookDirection.y);
+        Vector3 rotation = new Vector3(lookValue.x, 0f, lookValue.y);
         rotation.Normalize();
 
         //Rotate the player
