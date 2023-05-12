@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.Serialization;
 
 [Serializable]
 public class PlayerData
@@ -18,12 +19,13 @@ public class PlayerData
             OnScoreChange?.Invoke(m_Score);
         }
     }
-    public int PlayerID;
+    [FormerlySerializedAs("PlayerID")]
+    public int ID;
     public string Name;
     
-    public PlayerData(int playerID, string name)
+    public PlayerData(int id, string name)
     {
-        PlayerID = playerID;
+        ID = id;
         Name = name;
     }
     

@@ -25,16 +25,18 @@ public class GameManager : NetworkBehaviour
         {
             m_Instance = this;
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
+        
         // DEBUG
         GameData.Players.Add(0, new PlayerData(0, "Player 0"));
         GameData.Players.Add(1, new PlayerData(1, "Player 1"));
         // GameData.Players.Add(2, new PlayerData(2, "Player 2"));
         // GameData.Players.Add(3, new PlayerData(3, "Player 3"));
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame

@@ -6,7 +6,8 @@ using UnityEngine;
 public class GameDataScriptableObject : ScriptableObject, ISerializationCallbackReceiver
 {
     public int InitialTimer = 120;
-    public Dictionary<int, PlayerData> Players = new Dictionary<int, PlayerData>();
+    public readonly Dictionary<int, PlayerData> Players = new Dictionary<int, PlayerData>();
+    public int NumPlayers => Players.Count;
 
     [NonSerialized]
     public float RuntimeTimer;
@@ -18,13 +19,17 @@ public class GameDataScriptableObject : ScriptableObject, ISerializationCallback
 
     public void OnBeforeSerialize() { }
 
-    // public void IncrementPlayerScore(int id, int amt)
-    // {
-    //     Players[id].Score += amt;
-    // }
-
-    public void UpdatePlayerScores(int id, int newScore)
+    public void UpdatePlayerScore(PlayerScoreNetwork.PlayerScoreData scoreData)
     {
-        Players[id].Score = newScore;
+        var id = (int)scoreData.ID;
+        Players[id].Score = (int)scoreData.Score;
+        Debug.Log($"updating player score, id is {id}, score is now {Players[id].Score}");
     }
+    
+    public void UpdatePlayerScore(int id, int amt)
+    {
+        Players[id].Score = amt;
+    }
+
+    public int GetPlayerScore(int id) => Players[id].Score;
 }
