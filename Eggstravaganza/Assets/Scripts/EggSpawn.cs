@@ -15,7 +15,8 @@ public class Egg
 
 public class EggSpawn : MonoBehaviour
 {
-    public List<Egg> eggs;
+    [SerializeField]
+    List<Egg> eggs;
     
     double m_AccumulatedWeights;
     System.Random m_Rand = new();
@@ -40,7 +41,6 @@ public class EggSpawn : MonoBehaviour
     int ChooseEggToSpawn()
     {
         var randomWeight = m_Rand.NextDouble() * m_AccumulatedWeights;
-        Debug.Log(randomWeight);
         for (var i = 0; i < eggs.Count; ++i)
         {
             if (eggs[i].weight >= randomWeight)
