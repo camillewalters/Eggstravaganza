@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameNetwork : NetworkBehaviour
 {
     enum GameState { Start, Lobby, Playing, Pause, EndRound }
+    
     [SerializeField]
     GameManager GameManager;
     

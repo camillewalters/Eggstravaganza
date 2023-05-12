@@ -18,7 +18,7 @@ public class GameManager : NetworkBehaviour
         if (m_Instance != null && m_Instance != this)
         {
             Debug.LogError("Multiple GameManagers in scene!");
-            enabled = false;
+            enabled = false; // Destroy() causes NetworkObject issues
         }
         else
         {
@@ -34,18 +34,6 @@ public class GameManager : NetworkBehaviour
     {
         GameData.Players.TryAdd(id, new PlayerData(id, $"Player {id}"));
         UIManager.RegisterNewPlayer(id);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void EndRound()

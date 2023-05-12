@@ -19,7 +19,7 @@ public class PlayerData
             OnScoreChange?.Invoke(m_Score);
         }
     }
-    [FormerlySerializedAs("PlayerID")]
+    
     public int ID;
     public string Name;
     
