@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         playerControls.Player.Enable();
+
         move = playerControls.Player.Move;
 
         interact = playerControls.Player.Fire;
@@ -54,8 +55,8 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(movementDirection.x, 0f, movementDirection.y);
         movement.Normalize();
 
-        // Move the player
-        transform.Translate(movement * speed * Time.deltaTime);
+        //Move the player
+        transform.position = transform.position + movement * speed * Time.deltaTime;
 
         Vector2 lookDirection = look.ReadValue<Vector2>();
         Vector3 rotation = new Vector3(lookDirection.x, 0f, lookDirection.y);
