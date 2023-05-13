@@ -23,7 +23,7 @@ public class PlayerTransform : NetworkBehaviour {
     }
 
     public override void OnNetworkSpawn() {
-        if (!IsOwner) Destroy(transform.GetComponent<PlayerController>());
+        if (!IsOwner) Destroy(transform.GetComponent<TestPlayerController>());
     }
 
     private void Update() {

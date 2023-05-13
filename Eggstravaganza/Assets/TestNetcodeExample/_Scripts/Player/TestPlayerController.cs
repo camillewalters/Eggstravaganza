@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Just a crappy character controller for the video
 /// </summary>
-public class PlayerController : NetworkBehaviour
+public class TestPlayerController : NetworkBehaviour
 {
     private void Awake()
     {
