@@ -332,6 +332,8 @@ GameObject:
   - component: {fileID: 3361834574544056098}
   - component: {fileID: 8667052616836904280}
   - component: {fileID: 7109004259494708383}
+  - component: {fileID: 4603043774983027439}
+  - component: {fileID: 6475088276085551756}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -396,6 +398,38 @@ MonoBehaviour:
   lerpParam: 10
   body: {fileID: 3361834574544056098}
   eggInventory: 
+--- !u!114 &4603043774983027439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2732684518155842968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f19ab7cded48282b90e8b17fc8d0829, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GameData: {fileID: 11400000, guid: 610a9111475b5b030a18afcee12ac774, type: 2}
+--- !u!114 &6475088276085551756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2732684518155842968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 951099334
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &2748282422418694191
 GameObject:
   m_ObjectHideFlags: 0
