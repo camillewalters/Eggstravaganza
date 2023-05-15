@@ -331,8 +331,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3361834574544056098}
   - component: {fileID: 8667052616836904280}
-  - component: {fileID: 6075262574071231122}
-  - component: {fileID: -8433353083368726530}
+  - component: {fileID: 7109004259494708383}
+  - component: {fileID: 4603043774983027439}
+  - component: {fileID: 6475088276085551756}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -381,7 +382,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &6075262574071231122
+--- !u!114 &7109004259494708383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2732684518155842968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e1eb01bc1de8f14fa594c2bf23bb887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  lerpParam: 10
+  body: {fileID: 3361834574544056098}
+  eggInventory: 
+--- !u!114 &4603043774983027439
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -394,7 +411,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameData: {fileID: 11400000, guid: 610a9111475b5b030a18afcee12ac774, type: 2}
---- !u!114 &-8433353083368726530
+--- !u!114 &6475088276085551756
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
