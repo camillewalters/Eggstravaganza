@@ -36,12 +36,12 @@ public class PlayerData
     public struct PlayerRegisterData : INetworkSerializable
     {
         internal ulong ID;
-        internal string Name;
+        // internal string Name;
         
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref ID);
-            serializer.SerializeValue(ref Name);
+            // serializer.SerializeValue(ref Name);
         }
     }
 }

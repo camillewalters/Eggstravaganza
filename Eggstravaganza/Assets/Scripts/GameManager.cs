@@ -31,6 +31,11 @@ public class GameManager : NetworkBehaviour
         GameData.Players.TryAdd(id, new PlayerData(id, $"Player {id}"));
         UIManager.RegisterNewPlayer(id);
     }
+    
+    public void StartGame()
+    {
+        UIManager.StartGame();
+    }
 
     public void EndRound()
     {

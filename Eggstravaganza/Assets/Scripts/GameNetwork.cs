@@ -24,7 +24,7 @@ public class GameNetwork : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         // TODO: fix initial state
-        m_GameState.Value = GameState.Playing;
+        m_GameState.Value = GameState.Lobby;
         m_GameState.OnValueChanged += OnStateChange;
     }
     
@@ -38,6 +38,7 @@ public class GameNetwork : NetworkBehaviour
             case GameState.Lobby:
                 break;
             case GameState.Playing:
+                GameManager.StartGame();
                 break;
             case GameState.Pause:
                 break;
@@ -51,12 +52,31 @@ public class GameNetwork : NetworkBehaviour
 
     void Update()
     {
-        DecrementGameTime();
-        
-        // DEBUG
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // TODO: move this out to classes and not enum check...
+        switch (m_GameState.Value)
         {
-            EndRound();
+            case GameState.Start:
+                break;
+            case GameState.Lobby:
+                // TODO: check for new registered players..?
+                
+                break;
+            case GameState.Playing:
+                DecrementGameTime();
+        
+                // DEBUG
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    EndRound();
+                }
+                break;
+            case GameState.Pause:
+                break;
+            case GameState.EndRound:
+                GameManager.EndRound();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
     
@@ -82,6 +102,14 @@ public class GameNetwork : NetworkBehaviour
         if (IsOwner)
         {
             m_GameState.Value = GameState.EndRound;
+        }
+    }
+    
+    public void StartGame()
+    {
+        if (IsOwner)
+        {
+            m_GameState.Value = GameState.Playing;
         }
     }
 }
