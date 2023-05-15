@@ -71,7 +71,7 @@ public class GameNetwork : NetworkBehaviour
             }
             else 
             {
-                GameManager.EndRound();    
+                EndRound();
             }
         }
         GameData.RuntimeTimer = m_GameTimer.Value;
