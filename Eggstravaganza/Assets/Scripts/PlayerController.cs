@@ -15,8 +15,7 @@ public class PlayerController : MonoBehaviour
     private InputAction interact;
     private Vector2 lookValue;
 
-    public int[] eggInventory; //temporarily using an int, use Egg class later
-
+    public List<GameObject> eggInventory;
     private float stunTime = 1.5f;
     bool isStunned = false;
 
@@ -50,6 +49,21 @@ public class PlayerController : MonoBehaviour
         {
             Move();
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //Egg egg = other.GetComponent<Egg>();
+
+        Debug.Log(other.gameObject);
+        //other.gameObject.transform.SetParent(body.transform, false);
+        EggBehavior eggBehavior = other.gameObject.GetComponent<EggBehavior>();
+
+        if (!eggBehavior.isBeingHeld)
+        {
+            PickUpEgg(eggBehavior);
+        }
+
     }
 
     private void LookPerformed(InputAction.CallbackContext context)
@@ -94,22 +108,36 @@ public class PlayerController : MonoBehaviour
 
     private void Interact (InputAction.CallbackContext context)
     {
+        ThrowEgg();
         Debug.Log("we interacted");
     }
 
     private void ThrowEgg()
     {
-        //implement later
+        //choose egg to throw
+        GameObject eggToThrow = eggInventory[eggInventory.Count - 1];
+        eggToThrow.transform.parent = null;//unparent
+
+        //throw
+        eggToThrow.GetComponent<Rigidbody>().velocity = body.transform.forward * 20;
+        
     }
 
-    private void PickUpEgg()
+    private void PickUpEgg(EggBehavior eggBehavior)
     {
+        GameObject eggToBePickedUp = eggBehavior.gameObject;
         //add egg to inventory
+        eggInventory.Add(eggToBePickedUp);
+        //eggToBePickedUp.transform.position = body.transform.position;
+        eggToBePickedUp.transform.parent = body;
     }
 
     private IEnumerator LoseEgg()
     {
-        //remove egg from inventory
+        //remove egg from inventory using LIFO
+        GameObject eggToRemove = eggInventory[eggInventory.Count - 1];
+        eggToRemove.transform.parent = null;//unparent
+        eggInventory.Remove(eggToRemove);
 
         //gets stunned
         isStunned = true;

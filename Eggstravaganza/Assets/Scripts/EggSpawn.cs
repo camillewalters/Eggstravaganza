@@ -36,7 +36,9 @@ public class EggSpawn : MonoBehaviour
         // TODO: Maybe modify spawn height? Not sure what value we'd want yet
         var randomPosition = Random.insideUnitCircle * spawnAreaScale;
         var spawnPosition = new Vector3(randomPosition.x, 2, randomPosition.y);
-        Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
+        GameObject eggObject = Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
+
+        EggBehavior eggBehavior = eggObject.GetComponent<EggBehavior>();
         
         Debug.Log($"Spawned {currentEggToSpawn.prefab.name} now!");
     }
@@ -67,7 +69,7 @@ public class EggSpawn : MonoBehaviour
     
     public float timeRemaining;
     public bool timerIsRunning;
-    const float k_SpawnInterval = 1;
+    const float k_SpawnInterval = 7;
 
     void Start()
     {
