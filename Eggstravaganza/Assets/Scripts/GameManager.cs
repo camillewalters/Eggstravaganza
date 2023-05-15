@@ -24,10 +24,6 @@ public class GameManager : NetworkBehaviour
         {
             m_Instance = this;
         }
-        
-        // DEBUG
-        GameData.Players.Add(0, new PlayerData(0, "Player 0"));
-        GameData.Players.Add(1, new PlayerData(1, "Player 1"));
     }
 
     public void RegisterNewPlayer(int id)

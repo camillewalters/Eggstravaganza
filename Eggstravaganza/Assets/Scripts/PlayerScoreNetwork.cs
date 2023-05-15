@@ -10,13 +10,19 @@ public class PlayerScoreNetwork : NetworkBehaviour
     GameDataScriptableObject GameData;
 
     readonly NetworkVariable<PlayerScoreData> m_Score = new(writePerm: NetworkVariableWritePermission.Owner);
+    readonly NetworkVariable<PlayerData.PlayerRegisterData[]> m_RegisteredPlayers =
+        new(writePerm: NetworkVariableWritePermission.Owner) { Value = new PlayerData.PlayerRegisterData[4] };
 
     public override void OnNetworkSpawn()
     {
         var localID = (int)NetworkManager.LocalClientId;
         Debug.Log($"My client ID is {localID}");
-        // TODO: move this elsewhere
-        // GameManager.Instance.RegisterNewPlayer(localID);
+        m_RegisteredPlayers.Value[localID] = new PlayerData.PlayerRegisterData()
+        {
+            ID = NetworkManager.LocalClientId,
+            Name = $"Player {localID}" // TODO: fix this
+        };
+        GameManager.Instance.RegisterNewPlayer(localID);
     }
 
     // Update is called once per frame
