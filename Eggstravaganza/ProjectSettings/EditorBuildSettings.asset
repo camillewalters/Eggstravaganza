@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AmandaScene.unity
     guid: fe37ca01bcc8d324d848a1d9c8324883
+  - enabled: 1
+    path: Assets/Scenes/PriyankaScene.unity
+    guid: 6fce42dcf8ee1304192043a076b6c03e
   m_configObjects: {}

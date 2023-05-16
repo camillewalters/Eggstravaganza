@@ -13,7 +13,7 @@ public class Egg
     public double weight;
 }
 
-public class EggSpawn : MonoBehaviour
+public class EggSpawner : MonoBehaviour
 {
     [SerializeField]
     List<Egg> eggs;
@@ -29,19 +29,24 @@ public class EggSpawn : MonoBehaviour
         CalculateWeights();
     }
 
-    public void SpawnEgg()
+    public void SpawnEgg(Vector3 spawnPosition, int index = 0)
     {
-        var currentEggToSpawn = eggs[ChooseEggToSpawn()];
-        
-        // TODO: Maybe modify spawn height? Not sure what value we'd want yet
-        var randomPosition = Random.insideUnitCircle * spawnAreaScale;
-        var spawnPosition = new Vector3(randomPosition.x, 2, randomPosition.y);
+        var currentEggToSpawn = eggs[index];
         Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
         
         Debug.Log($"Spawned {currentEggToSpawn.prefab.name} now!");
     }
 
-    int ChooseEggToSpawn()
+    public Vector3 ChooseSpawnPosition()
+    {
+        // TODO: Maybe modify spawn height? Not sure what value we'd want yet
+        var randomPosition = Random.insideUnitCircle * spawnAreaScale;
+        var spawnPosition = new Vector3(randomPosition.x, 2, randomPosition.y);
+
+        return spawnPosition;
+    }
+
+    public int ChooseEggToSpawn()
     {
         var randomWeight = m_Rand.NextDouble() * m_AccumulatedWeights;
         for (var i = 0; i < eggs.Count; ++i)
@@ -62,39 +67,4 @@ public class EggSpawn : MonoBehaviour
             egg.weight = m_AccumulatedWeights;
         }
     }
-    
-    // TODO: Uncomment this only for testing purposes, delete and call SpawnEgg() in GameManager instead after it is created 
-    /*
-    public float timeRemaining;
-    public bool timerIsRunning;
-    const float k_SpawnInterval = 20;
-
-    void Start()
-    {
-        timeRemaining = k_SpawnInterval;
-        timerIsRunning = true;
-    }
-
-    void Update()
-    {
-        if (timerIsRunning)
-        {
-            if (timeRemaining > 0)
-            {
-                timeRemaining -= Time.fixedDeltaTime;
-            }
-            else
-            {
-                SpawnEgg();
-                timeRemaining = 0;
-                timerIsRunning = false;
-            }
-        }
-        else
-        {
-            timeRemaining = k_SpawnInterval;
-            timerIsRunning = true;
-        }
-    }
-    */
 }
