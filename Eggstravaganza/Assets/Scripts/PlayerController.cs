@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 lookValue;
 
     public List<GameObject> eggInventory;
-    private float stunTime = 1.5f;
+    private float stunTime = 0f;
     bool isStunned = false;
 
     private void Awake()
@@ -56,15 +56,15 @@ public class PlayerController : MonoBehaviour
         EggBehavior eggBehavior = other.gameObject.GetComponent<EggBehavior>();
         if(eggBehavior != null)
         {
-            if (!eggBehavior.isBeingHeld)
+            if (!eggBehavior.isBeingHeld && !eggBehavior.isBeingThrown)
             {
                 PickUpEgg(other.gameObject);
                 eggBehavior.isBeingHeld = true;
             }
-            //if (eggBehavior.isBeingThrown)
-            //{
-            //    LoseEgg();
-            //}
+            if (eggBehavior.isBeingThrown)
+            {
+                LoseEgg();
+            }
         }
     }
 
@@ -114,7 +114,8 @@ public class PlayerController : MonoBehaviour
 
     private void Interact (InputAction.CallbackContext context)
     {
-        ThrowEgg();
+        //ThrowEgg();
+        StartCoroutine(LoseEgg());
     }
 
     private void ThrowEgg()
@@ -131,9 +132,12 @@ public class PlayerController : MonoBehaviour
             eggToThrow.transform.parent = null;//unparent
 
             //throw
-            eggToThrow.GetComponent<Rigidbody>().velocity = body.transform.forward * 20 + body.transform.up * 20;//expose magic numbers l8r
+            eggRb.velocity = body.transform.forward * 20 + body.transform.up * 5;//expose magic numbers 
             eggInventory.Remove(eggToThrow);
-            
+
+            EggBehavior eggBehavior = eggToThrow.GetComponent<EggBehavior>();
+            eggBehavior.isBeingThrown = true;
+
         }      
 
     }
@@ -157,20 +161,27 @@ public class PlayerController : MonoBehaviour
     private Vector3 NextEggHoldLocation()
     {
         var basePosition = body.Find("EggLocation").transform.position;
-        var nextLocation = basePosition + new Vector3(0, 0.4f * (eggInventory.Count + 1), 0);//needs to be smaller?
+        var nextLocation = basePosition + new Vector3(0, 0.4f * (eggInventory.Count - 1), 0);//approx height of egg
         return nextLocation;
     }
 
-    //private IEnumerator LoseEgg()
-    //{
-    //    //remove egg from inventory using LIFO
-    //    GameObject eggToRemove = eggInventory[eggInventory.Count - 1];
-    //    eggToRemove.transform.parent = null;//unparent
-    //    eggInventory.Remove(eggToRemove);
+    private IEnumerator LoseEgg()
+    {
+        //remove egg from inventory using LIFO
+        if (eggInventory.Count > 0)
+        {
+            GameObject eggToRemove = eggInventory[eggInventory.Count - 1];
+            eggToRemove.transform.parent = null;//unparent
+            eggInventory.Remove(eggToRemove);
 
-    //    //gets stunned
-    //    isStunned = true;
-    //    yield return new WaitForSeconds(stunTime);
-    //    isStunned = false;
-    //}
+            var eggRb = eggToRemove.GetComponent<Rigidbody>();
+            eggRb.velocity = body.transform.forward * -2;//falls backwards with a bit of velocity
+            eggRb.isKinematic = false;
+        }
+
+        //gets stunned (even if no egg in inventory? can change later)
+        isStunned = true;
+        yield return new WaitForSeconds(stunTime);
+        isStunned = false;
+    }
 }
