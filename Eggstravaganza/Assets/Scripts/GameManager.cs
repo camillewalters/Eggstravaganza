@@ -26,10 +26,16 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Add new player to local GameData, enable UI
+    /// </summary>
+    /// <param name="id">Local client ID of joining player</param>
     public void RegisterNewPlayer(int id)
     {
-        GameData.Players.TryAdd(id, new PlayerData(id, $"Player {id}"));
-        UIManager.RegisterNewPlayer(id);
+        if (GameData.Players.TryAdd(id, new PlayerData(id, $"Player {id}")))
+        {
+            UIManager.RegisterNewPlayer(id);       
+        }
     }
     
     public void StartGame()

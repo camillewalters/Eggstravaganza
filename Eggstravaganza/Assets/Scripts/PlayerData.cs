@@ -1,6 +1,5 @@
 using System;
 using Unity.Netcode;
-using UnityEngine.Serialization;
 
 [Serializable]
 public class PlayerData
@@ -32,16 +31,4 @@ public class PlayerData
     
     public delegate void OnVariableChangeDelegate(int newVal);
     public event OnVariableChangeDelegate OnScoreChange;
-    
-    public struct PlayerRegisterData : INetworkSerializable
-    {
-        internal ulong ID;
-        // internal string Name;
-        
-        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-        {
-            serializer.SerializeValue(ref ID);
-            // serializer.SerializeValue(ref Name);
-        }
-    }
 }

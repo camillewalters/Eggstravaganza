@@ -16,13 +16,9 @@ public class GameNetwork : NetworkBehaviour
     readonly NetworkVariable<float> m_GameTimer = new(writePerm: NetworkVariableWritePermission.Server);
     readonly NetworkVariable<GameState> m_GameState = new(writePerm: NetworkVariableWritePermission.Server);
 
-    void Awake()
-    {
-        m_GameTimer.Value = GameData.InitialTimer;
-    }
-
     public override void OnNetworkSpawn()
     {
+        m_GameTimer.Value = GameData.InitialTimer;
         // TODO: fix initial state
         m_GameState.Value = GameState.Lobby;
         m_GameState.OnValueChanged += OnStateChange;
@@ -52,23 +48,14 @@ public class GameNetwork : NetworkBehaviour
 
     void Update()
     {
-        // TODO: move this out to classes and not enum check...
+        // TODO: move this out to classes and not enum check
         switch (m_GameState.Value)
         {
             case GameState.Start:
-                break;
             case GameState.Lobby:
-                // TODO: check for new registered players..?
-                
                 break;
             case GameState.Playing:
                 DecrementGameTime();
-        
-                // DEBUG
-                if (Input.GetKeyDown(KeyCode.Escape))
-                {
-                    EndRound();
-                }
                 break;
             case GameState.Pause:
                 break;

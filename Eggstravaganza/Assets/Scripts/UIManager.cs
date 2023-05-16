@@ -33,14 +33,6 @@ public class UIManager : MonoBehaviour
     {
         { 0, "1st" }, { 1, "2nd" }, { 2, "3rd" }, { 3, "4th" }
     };
-
-    void Start()
-    {
-        foreach (var player in GameData.Players)
-        {
-            RegisterNewPlayer(player.Key);
-        }
-    }
     
     public void RegisterNewPlayer(int id)
     {
