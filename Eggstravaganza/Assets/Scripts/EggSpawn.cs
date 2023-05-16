@@ -43,7 +43,7 @@ public class EggSpawn : MonoBehaviour
 
         EggBehavior eggBehavior = eggObject.GetComponent<EggBehavior>();
         
-        Debug.Log($"Spawned {currentEggToSpawn.prefab.name} now!");
+        //Debug.Log($"Spawned {currentEggToSpawn.prefab.name} now!");
     }
 
     int ChooseEggToSpawn()

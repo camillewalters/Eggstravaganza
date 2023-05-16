@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
     public List<GameObject> eggInventory;
     private float stunTime = 1.5f;
     bool isStunned = false;
-    bool canPickUp = false;
 
     private void Awake()
     {
@@ -34,7 +33,6 @@ public class PlayerController : MonoBehaviour
         interact.performed += Interact;
 
         playerControls.Player.Look.performed += LookPerformed;
-        //look = playerControls.Player.Look;
     }
     private void OnDisable()
     {
@@ -54,18 +52,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
-        //Egg egg = other.GetComponent<Egg>();
-
-        Debug.Log(other.gameObject);
-        //other.gameObject.transform.SetParent(body.transform, false);
+       // Debug.Log(other.gameObject);
         EggBehavior eggBehavior = other.gameObject.GetComponent<EggBehavior>();
         if(eggBehavior != null)
         {
             if (!eggBehavior.isBeingHeld)
             {
-                canPickUp = true;
                 PickUpEgg(other.gameObject);
+                eggBehavior.isBeingHeld = true;
             }
             //if (eggBehavior.isBeingThrown)
             //{
@@ -76,7 +70,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        canPickUp = false;
     }
 
     private void LookPerformed(InputAction.CallbackContext context)
@@ -121,32 +114,27 @@ public class PlayerController : MonoBehaviour
 
     private void Interact (InputAction.CallbackContext context)
     {
-        //var lookLocation = body.Find("EggLocation");
-        //if(Physics.Raycast(lookLocation.position, lookLocation.forward, out RaycastHit raycastHit, 2f))
-        //{
-        //    if(raycastHit.transform.TryGetComponent(out EggBehavior eb))
-        //    {
-        //        Debug.Log("found an egg to hit");
-        //    }
-        //}
-
         ThrowEgg();
-        Debug.Log("we interacted");
     }
 
     private void ThrowEgg()
     {
-        //choose egg to throw
-        GameObject eggToThrow = eggInventory[eggInventory.Count - 1];
-        var eggRb = eggToThrow.GetComponent<Rigidbody>();
-        eggRb.isKinematic = false;
-        eggRb.useGravity = true;
-        //eggToThrow.SetActive(true);
-        eggToThrow.transform.parent = null;//unparent
+        Debug.Log(eggInventory.Count);
+        if (eggInventory.Count > 0)
+        {
+            //choose egg to throw
+            GameObject eggToThrow = eggInventory[eggInventory.Count - 1];
+            var eggRb = eggToThrow.GetComponent<Rigidbody>();
 
-        //throw
-        eggRb.velocity = body.transform.forward * 20 + body.transform.up * 20;
-        Debug.Log("egg thrown");
+            eggRb.isKinematic = false;
+            //eggRb.useGravity = true;
+            eggToThrow.transform.parent = null;//unparent
+
+            //throw
+            eggToThrow.GetComponent<Rigidbody>().velocity = body.transform.forward * 20 + body.transform.up * 20;//expose magic numbers l8r
+            eggInventory.Remove(eggToThrow);
+            
+        }      
 
     }
 
@@ -155,17 +143,14 @@ public class PlayerController : MonoBehaviour
         eggInventory.Add(eggToBePickedUp);
 
         //workshop these two
-        //eggToBePickedUp.transform.position = NextEggHoldLocation();
-        eggToBePickedUp.transform.position = body.Find("EggLocation").transform.position;
+        eggToBePickedUp.transform.position = NextEggHoldLocation();
+        //eggToBePickedUp.transform.position = body.Find("EggLocation").transform.position;
 
-        //GameObject eggToBePickedUp = eggBehavior.gameObject;
-        ////add egg to inventory
-        //eggInventory.Add(eggToBePickedUp);
         var eggRb = eggToBePickedUp.GetComponent<Rigidbody>();
+
         eggRb.isKinematic = true;
-        eggRb.useGravity = false;
-        ////eggToBePickedUp.SetActive(false);
-        ////eggToBePickedUp.transform.position = body.transform.position;
+        //eggRb.useGravity = false;
+
         eggToBePickedUp.transform.parent = body;
     }
     
