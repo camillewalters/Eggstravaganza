@@ -23,7 +23,6 @@ public class GameNetwork : NetworkBehaviour
     [SerializeField]
     float maxEggSpawnTime = 8;
     float m_TimeRemaining;
-    bool m_TimerIsRunning;
 
     void Awake()
     {
@@ -31,7 +30,6 @@ public class GameNetwork : NetworkBehaviour
         
         m_EggSpawner = this.gameObject.GetComponent<EggSpawner>();
         m_TimeRemaining = Random.Range(0, maxEggSpawnTime);
-        m_TimerIsRunning = true;
         
         // Choose first egg to spawn and its position
         m_EggToSpawnIndex.Value = m_EggSpawner.ChooseEggToSpawn();
@@ -109,31 +107,22 @@ public class GameNetwork : NetworkBehaviour
             return;
         
         // Spawns an egg at a random time from 1 to maxEggSpawnTime seconds
-        if (m_TimerIsRunning)
+        if (m_TimeRemaining > 0)
         {
-            if (m_TimeRemaining > 0)
-            {
-                m_TimeRemaining -= Time.deltaTime;
-            }
-            else
-            {
-                // Update timer
-                m_TimeRemaining = 0;
-                m_TimerIsRunning = false;
-
-                // Spawn chosen egg
-                RequestSpawnEggServerRpc();
-                m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
-        
-                // Choose next egg to spawn and its position
-                m_EggToSpawnIndex.Value = m_EggSpawner.ChooseEggToSpawn();
-                m_EggSpawnPosition.Value = m_EggSpawner.ChooseSpawnPosition();
-            }
+            m_TimeRemaining -= Time.deltaTime;
         }
         else
         {
+            // Update timer
             m_TimeRemaining = Random.Range(0, maxEggSpawnTime);
-            m_TimerIsRunning = true;
+
+            // Spawn chosen egg
+            RequestSpawnEggServerRpc();
+            m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
+    
+            // Choose next egg to spawn and its position
+            m_EggToSpawnIndex.Value = m_EggSpawner.ChooseEggToSpawn();
+            m_EggSpawnPosition.Value = m_EggSpawner.ChooseSpawnPosition();
         }
     }
 
