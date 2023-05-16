@@ -1,6 +1,7 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameNetwork : NetworkBehaviour
 {
@@ -19,16 +20,17 @@ public class GameNetwork : NetworkBehaviour
     NetworkVariable<int> m_EggToSpawnIndex = new(writePerm: NetworkVariableWritePermission.Server);
     NetworkVariable<Vector3> m_EggSpawnPosition = new(writePerm: NetworkVariableWritePermission.Server);
 
+    [SerializeField]
+    float maxEggSpawnTime = 8;
     float m_TimeRemaining;
     bool m_TimerIsRunning;
-    const float k_SpawnInterval = 10;
 
     void Awake()
     {
         m_GameTimer.Value = GameData.InitialTimer;
         
         m_EggSpawner = this.gameObject.GetComponent<EggSpawner>();
-        m_TimeRemaining = k_SpawnInterval;
+        m_TimeRemaining = Random.Range(0, maxEggSpawnTime);
         m_TimerIsRunning = true;
         
         // Choose first egg to spawn and its position
@@ -73,7 +75,6 @@ public class GameNetwork : NetworkBehaviour
         {
             EndRound();
         }
-        
         SpawnCountdown();
     }
     
@@ -104,26 +105,10 @@ public class GameNetwork : NetworkBehaviour
 
     void SpawnCountdown()
     {
-        // Temp
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (!IsOwner)
-            {
-                return;
-            }
-
-            // Spawn chosen egg
-            RequestSpawnEggServerRpc();
-            Debug.Log($"Spawning on Server {m_EggToSpawnIndex.Value}");
-            m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
+        if (!IsOwner)
+            return;
         
-            // Choose next egg to spawn and its position
-            m_EggToSpawnIndex.Value = m_EggSpawner.ChooseEggToSpawn();
-            m_EggSpawnPosition.Value = m_EggSpawner.ChooseSpawnPosition();
-        }
-        
-        /*
-        // Spawns an egg every 10 seconds
+        // Spawns an egg at a random time from 1 to maxEggSpawnTime seconds
         if (m_TimerIsRunning)
         {
             if (m_TimeRemaining > 0)
@@ -132,17 +117,24 @@ public class GameNetwork : NetworkBehaviour
             }
             else
             {
-                m_EggSpawner.SpawnEgg();
+                // Update timer
                 m_TimeRemaining = 0;
                 m_TimerIsRunning = false;
+
+                // Spawn chosen egg
+                RequestSpawnEggServerRpc();
+                m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
+        
+                // Choose next egg to spawn and its position
+                m_EggToSpawnIndex.Value = m_EggSpawner.ChooseEggToSpawn();
+                m_EggSpawnPosition.Value = m_EggSpawner.ChooseSpawnPosition();
             }
         }
         else
         {
-            m_TimeRemaining = k_SpawnInterval;
+            m_TimeRemaining = Random.Range(0, maxEggSpawnTime);
             m_TimerIsRunning = true;
         }
-        */
     }
 
     [ServerRpc]
@@ -156,7 +148,6 @@ public class GameNetwork : NetworkBehaviour
     {
         if (!IsOwner)
         {
-            Debug.Log($"Spawning {m_EggToSpawnIndex.Value}");
             m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
         }
     }

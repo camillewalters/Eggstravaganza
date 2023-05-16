@@ -34,7 +34,7 @@ public class EggSpawner : MonoBehaviour
         var currentEggToSpawn = eggs[index];
         Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
         
-        Debug.Log($"Spawned {currentEggToSpawn.prefab.name} now!");
+        Debug.Log($"Spawned {currentEggToSpawn.prefab.name}!");
     }
 
     public Vector3 ChooseSpawnPosition()
