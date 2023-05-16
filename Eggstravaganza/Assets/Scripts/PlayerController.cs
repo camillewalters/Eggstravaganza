@@ -118,14 +118,13 @@ public class PlayerController : MonoBehaviour
 
     private void Interact (InputAction.CallbackContext context)
     {
-        //to *very roughly* test locally (just one player), comment line 122 and uncomment line 123
+        //to *very roughly* test LoseEgg locally (just one player), comment line 122 and uncomment line 123
         ThrowEgg();
         //StartCoroutine(LoseEgg());
     }
 
     private void ThrowEgg()
     {
-        Debug.Log(eggInventory.Count);
         if (eggInventory.Count > 0)
         {
             //choose egg to throw
