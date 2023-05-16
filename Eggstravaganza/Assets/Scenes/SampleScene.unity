@@ -640,6 +640,7 @@ MonoBehaviour:
     chance: 100
     weight: 0
   spawnAreaScale: 1
+  spawnedEggs: []
   timeRemaining: 0
   timerIsRunning: 0
 --- !u!4 &858244813
@@ -667,6 +668,11 @@ PrefabInstance:
     - target: {fileID: 1231281954442966026, guid: c73ae6621f8832748a78dfb8aec6dd12,
         type: 3}
       propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1231281954442966026, guid: c73ae6621f8832748a78dfb8aec6dd12,
+        type: 3}
+      propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2732684518155842968, guid: c73ae6621f8832748a78dfb8aec6dd12,

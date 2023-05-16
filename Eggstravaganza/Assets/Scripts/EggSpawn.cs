@@ -24,6 +24,8 @@ public class EggSpawn : MonoBehaviour
     double m_AccumulatedWeights;
     System.Random m_Rand = new();
 
+    public List<GameObject> spawnedEggs = new List<GameObject>();
+
     void Awake()
     {
         CalculateWeights();
@@ -37,6 +39,7 @@ public class EggSpawn : MonoBehaviour
         var randomPosition = Random.insideUnitCircle * spawnAreaScale;
         var spawnPosition = new Vector3(randomPosition.x, 2, randomPosition.y);
         GameObject eggObject = Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
+        spawnedEggs.Add(eggObject);
 
         EggBehavior eggBehavior = eggObject.GetComponent<EggBehavior>();
         

@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public List<GameObject> eggInventory;
     private float stunTime = 1.5f;
     bool isStunned = false;
+    bool canPickUp = false;
 
     private void Awake()
     {
@@ -53,21 +54,29 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        
         //Egg egg = other.GetComponent<Egg>();
 
         Debug.Log(other.gameObject);
         //other.gameObject.transform.SetParent(body.transform, false);
         EggBehavior eggBehavior = other.gameObject.GetComponent<EggBehavior>();
+        if(eggBehavior != null)
+        {
+            if (!eggBehavior.isBeingHeld)
+            {
+                canPickUp = true;
+                PickUpEgg(other.gameObject);
+            }
+            //if (eggBehavior.isBeingThrown)
+            //{
+            //    LoseEgg();
+            //}
+        }
+    }
 
-        //if (!eggBehavior.isBeingHeld)
-        //{
-        //    PickUpEgg(eggBehavior);
-        //}
-        //if (eggBehavior.isBeingThrown)
-        //{
-        //    LoseEgg();
-        //}
-
+    private void OnTriggerExit(Collider other)
+    {
+        canPickUp = false;
     }
 
     private void LookPerformed(InputAction.CallbackContext context)
@@ -112,14 +121,14 @@ public class PlayerController : MonoBehaviour
 
     private void Interact (InputAction.CallbackContext context)
     {
-        var lookLocation = body.Find("EggLocation");
-        if(Physics.Raycast(lookLocation.position, lookLocation.forward, out RaycastHit raycastHit, 2f))
-        {
-            if(raycastHit.transform.TryGetComponent(out EggBehavior eb))
-            {
-                Debug.Log("found an egg to hit");
-            }
-        }
+        //var lookLocation = body.Find("EggLocation");
+        //if(Physics.Raycast(lookLocation.position, lookLocation.forward, out RaycastHit raycastHit, 2f))
+        //{
+        //    if(raycastHit.transform.TryGetComponent(out EggBehavior eb))
+        //    {
+        //        Debug.Log("found an egg to hit");
+        //    }
+        //}
 
         ThrowEgg();
         Debug.Log("we interacted");
@@ -129,38 +138,54 @@ public class PlayerController : MonoBehaviour
     {
         //choose egg to throw
         GameObject eggToThrow = eggInventory[eggInventory.Count - 1];
-        eggToThrow.SetActive(true);
+        var eggRb = eggToThrow.GetComponent<Rigidbody>();
+        eggRb.isKinematic = false;
+        eggRb.useGravity = true;
+        //eggToThrow.SetActive(true);
         eggToThrow.transform.parent = null;//unparent
 
         //throw
-        eggToThrow.GetComponent<Rigidbody>().velocity = body.transform.forward * 20 + body.transform.up * 20;
-        
+        eggRb.velocity = body.transform.forward * 20 + body.transform.up * 20;
+        Debug.Log("egg thrown");
+
     }
 
-    private void PickUpEgg(EggBehavior eggBehavior)
+    private void PickUpEgg(GameObject eggToBePickedUp)
     {
-        GameObject eggToBePickedUp = eggBehavior.gameObject;
-        //add egg to inventory
         eggInventory.Add(eggToBePickedUp);
+
+        //workshop these two
+        //eggToBePickedUp.transform.position = NextEggHoldLocation();
         eggToBePickedUp.transform.position = body.Find("EggLocation").transform.position;
+
+        //GameObject eggToBePickedUp = eggBehavior.gameObject;
+        ////add egg to inventory
+        //eggInventory.Add(eggToBePickedUp);
         var eggRb = eggToBePickedUp.GetComponent<Rigidbody>();
-        eggRb.isKinematic = false;
+        eggRb.isKinematic = true;
         eggRb.useGravity = false;
-        //eggToBePickedUp.SetActive(false);
-        //eggToBePickedUp.transform.position = body.transform.position;
+        ////eggToBePickedUp.SetActive(false);
+        ////eggToBePickedUp.transform.position = body.transform.position;
         eggToBePickedUp.transform.parent = body;
     }
-
-    private IEnumerator LoseEgg()
+    
+    private Vector3 NextEggHoldLocation()
     {
-        //remove egg from inventory using LIFO
-        GameObject eggToRemove = eggInventory[eggInventory.Count - 1];
-        eggToRemove.transform.parent = null;//unparent
-        eggInventory.Remove(eggToRemove);
-
-        //gets stunned
-        isStunned = true;
-        yield return new WaitForSeconds(stunTime);
-        isStunned = false;
+        var basePosition = body.Find("EggLocation").transform.position;
+        var nextLocation = basePosition + new Vector3(0, 0.4f * (eggInventory.Count + 1), 0);//needs to be smaller?
+        return nextLocation;
     }
+
+    //private IEnumerator LoseEgg()
+    //{
+    //    //remove egg from inventory using LIFO
+    //    GameObject eggToRemove = eggInventory[eggInventory.Count - 1];
+    //    eggToRemove.transform.parent = null;//unparent
+    //    eggInventory.Remove(eggToRemove);
+
+    //    //gets stunned
+    //    isStunned = true;
+    //    yield return new WaitForSeconds(stunTime);
+    //    isStunned = false;
+    //}
 }
