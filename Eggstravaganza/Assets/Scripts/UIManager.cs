@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
     {
         if (LobbyPanel.activeSelf)
         {
-            LobbyTimerText.SetText(GameData.LobbyTimer.ToString("F"));
+            LobbyTimerText.SetText($"Time until game starts: {GameData.LobbyTimer:F}");
         }
 
         if (GamePanel.activeSelf)
