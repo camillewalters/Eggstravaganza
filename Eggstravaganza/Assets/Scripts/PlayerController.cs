@@ -19,6 +19,10 @@ public class PlayerController : MonoBehaviour
     private float stunTime = 0f;
     bool isStunned = false;
 
+    const int throwForwardFactor = 20;
+    const int throwUpwardFactor = 5;
+    const int dropForwardFactor = -1; //negative so it goes backwards
+
     private void Awake()
     {
         playerControls = new PlayerInputActions();
@@ -114,8 +118,9 @@ public class PlayerController : MonoBehaviour
 
     private void Interact (InputAction.CallbackContext context)
     {
-        //ThrowEgg();
-        StartCoroutine(LoseEgg());
+        //to *very roughly* test locally (just one player), comment line 122 and uncomment line 123
+        ThrowEgg();
+        //StartCoroutine(LoseEgg());
     }
 
     private void ThrowEgg()
@@ -128,11 +133,10 @@ public class PlayerController : MonoBehaviour
             var eggRb = eggToThrow.GetComponent<Rigidbody>();
 
             eggRb.isKinematic = false;
-            //eggRb.useGravity = true;
             eggToThrow.transform.parent = null;//unparent
 
             //throw
-            eggRb.velocity = body.transform.forward * 20 + body.transform.up * 5;//expose magic numbers 
+            eggRb.velocity = body.transform.forward * throwForwardFactor+ body.transform.up * throwUpwardFactor;
             eggInventory.Remove(eggToThrow);
 
             EggBehavior eggBehavior = eggToThrow.GetComponent<EggBehavior>();
@@ -153,7 +157,6 @@ public class PlayerController : MonoBehaviour
         var eggRb = eggToBePickedUp.GetComponent<Rigidbody>();
 
         eggRb.isKinematic = true;
-        //eggRb.useGravity = false;
 
         eggToBePickedUp.transform.parent = body;
     }
@@ -175,7 +178,7 @@ public class PlayerController : MonoBehaviour
             eggInventory.Remove(eggToRemove);
 
             var eggRb = eggToRemove.GetComponent<Rigidbody>();
-            eggRb.velocity = body.transform.forward * -2;//falls backwards with a bit of velocity
+            eggRb.velocity = body.transform.forward * dropForwardFactor;//falls backwards with a bit of velocity
             eggRb.isKinematic = false;
         }
 
