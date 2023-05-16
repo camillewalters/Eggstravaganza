@@ -59,10 +59,14 @@ public class PlayerController : MonoBehaviour
         //other.gameObject.transform.SetParent(body.transform, false);
         EggBehavior eggBehavior = other.gameObject.GetComponent<EggBehavior>();
 
-        if (!eggBehavior.isBeingHeld)
-        {
-            PickUpEgg(eggBehavior);
-        }
+        //if (!eggBehavior.isBeingHeld)
+        //{
+        //    PickUpEgg(eggBehavior);
+        //}
+        //if (eggBehavior.isBeingThrown)
+        //{
+        //    LoseEgg();
+        //}
 
     }
 
@@ -108,6 +112,15 @@ public class PlayerController : MonoBehaviour
 
     private void Interact (InputAction.CallbackContext context)
     {
+        var lookLocation = body.Find("EggLocation");
+        if(Physics.Raycast(lookLocation.position, lookLocation.forward, out RaycastHit raycastHit, 2f))
+        {
+            if(raycastHit.transform.TryGetComponent(out EggBehavior eb))
+            {
+                Debug.Log("found an egg to hit");
+            }
+        }
+
         ThrowEgg();
         Debug.Log("we interacted");
     }
@@ -116,10 +129,11 @@ public class PlayerController : MonoBehaviour
     {
         //choose egg to throw
         GameObject eggToThrow = eggInventory[eggInventory.Count - 1];
+        eggToThrow.SetActive(true);
         eggToThrow.transform.parent = null;//unparent
 
         //throw
-        eggToThrow.GetComponent<Rigidbody>().velocity = body.transform.forward * 20;
+        eggToThrow.GetComponent<Rigidbody>().velocity = body.transform.forward * 20 + body.transform.up * 20;
         
     }
 
@@ -128,6 +142,11 @@ public class PlayerController : MonoBehaviour
         GameObject eggToBePickedUp = eggBehavior.gameObject;
         //add egg to inventory
         eggInventory.Add(eggToBePickedUp);
+        eggToBePickedUp.transform.position = body.Find("EggLocation").transform.position;
+        var eggRb = eggToBePickedUp.GetComponent<Rigidbody>();
+        eggRb.isKinematic = false;
+        eggRb.useGravity = false;
+        //eggToBePickedUp.SetActive(false);
         //eggToBePickedUp.transform.position = body.transform.position;
         eggToBePickedUp.transform.parent = body;
     }
