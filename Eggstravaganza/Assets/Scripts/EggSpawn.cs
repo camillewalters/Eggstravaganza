@@ -20,11 +20,9 @@ public class EggSpawn : MonoBehaviour
 
     [SerializeField]
     float spawnAreaScale = 1;
-    
+
     double m_AccumulatedWeights;
     System.Random m_Rand = new();
-
-    public List<GameObject> spawnedEggs = new List<GameObject>();
 
     void Awake()
     {
@@ -34,16 +32,13 @@ public class EggSpawn : MonoBehaviour
     public void SpawnEgg()
     {
         var currentEggToSpawn = eggs[ChooseEggToSpawn()];
-        
+
         // TODO: Maybe modify spawn height? Not sure what value we'd want yet
         var randomPosition = Random.insideUnitCircle * spawnAreaScale;
         var spawnPosition = new Vector3(randomPosition.x, 2, randomPosition.y);
-        GameObject eggObject = Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
-        spawnedEggs.Add(eggObject);
+        Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
 
-        EggBehavior eggBehavior = eggObject.GetComponent<EggBehavior>();
-        
-        //Debug.Log($"Spawned {currentEggToSpawn.prefab.name} now!");
+        Debug.Log($"Spawned {currentEggToSpawn.prefab.name} now!");
     }
 
     int ChooseEggToSpawn()
@@ -67,12 +62,12 @@ public class EggSpawn : MonoBehaviour
             egg.weight = m_AccumulatedWeights;
         }
     }
-    
+
     // TODO: Uncomment this only for testing purposes, delete and call SpawnEgg() in GameManager instead after it is created 
-    
+    /*
     public float timeRemaining;
     public bool timerIsRunning;
-    const float k_SpawnInterval = 7;
+    const float k_SpawnInterval = 20;
 
     void Start()
     {
@@ -101,5 +96,5 @@ public class EggSpawn : MonoBehaviour
             timerIsRunning = true;
         }
     }
-    
+    */
 }
