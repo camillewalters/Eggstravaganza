@@ -1,14 +1,20 @@
 using System;
 using UnityEditor;
+#if UNITY_EDITOR
 using UnityEngine;
+#endif
 using Random = UnityEngine.Random;
 public class ItemsSpawn: MonoBehaviour
 {
     GameObject[] m_Prefabs;
     [SerializeField]
-    int numItemsToSpawn = 5;
+    int maxNumItemsToSpawn = 5;
     [SerializeField]
     float spawnAreaScale = 1;
+    [SerializeField]
+    int minHeightSpawn = 2;
+    [SerializeField]
+    int maxHeightSpawn = 6;
     
     void Awake()
     {
@@ -17,15 +23,16 @@ public class ItemsSpawn: MonoBehaviour
     // Function to be called by Game Manager
     public void SpawnItem()
     {
-        for (var i = 0; i < numItemsToSpawn; i++)
+        for (var i = 0; i < Random.Range(1, maxNumItemsToSpawn + 1); i++)
         {
             var pickRand = Random.Range(0, m_Prefabs.Length);
-            var spawnPos = Random.insideUnitSphere * spawnAreaScale;
-            Instantiate(m_Prefabs[pickRand],  new Vector3(spawnPos.x, Random.Range(2, 6), spawnPos.y), Quaternion.identity);
+            var spawnPos = Random.insideUnitCircle * spawnAreaScale;
+            Instantiate(m_Prefabs[pickRand],  new Vector3(spawnPos.x, Random.Range(minHeightSpawn, maxHeightSpawn), spawnPos.y), Quaternion.identity);
         }
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(ItemsSpawn))]
 public class SpawnEditor : Editor
 {
@@ -39,3 +46,4 @@ public class SpawnEditor : Editor
         }
     }
 }
+#endif
