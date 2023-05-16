@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,18 +12,17 @@ public class GameNetwork : NetworkBehaviour
     [SerializeField]
     GameDataScriptableObject GameData;
 
+    readonly NetworkVariable<bool> m_EnoughPlayers = new(writePerm: NetworkVariableWritePermission.Server);
+    readonly NetworkVariable<float> m_LobbyTimer = new(writePerm: NetworkVariableWritePermission.Server);
     readonly NetworkVariable<float> m_GameTimer = new(writePerm: NetworkVariableWritePermission.Server);
     readonly NetworkVariable<GameState> m_GameState = new(writePerm: NetworkVariableWritePermission.Server);
 
-    void Awake()
-    {
-        m_GameTimer.Value = GameData.InitialTimer;
-    }
-
     public override void OnNetworkSpawn()
     {
+        m_GameTimer.Value = GameData.InitialGameTimer;
+        m_LobbyTimer.Value = GameData.InitialLobbyTimer;
         // TODO: fix initial state
-        m_GameState.Value = GameState.Playing;
+        m_GameState.Value = GameState.Lobby;
         m_GameState.OnValueChanged += OnStateChange;
     }
     
@@ -38,6 +36,7 @@ public class GameNetwork : NetworkBehaviour
             case GameState.Lobby:
                 break;
             case GameState.Playing:
+                GameManager.StartGame();
                 break;
             case GameState.Pause:
                 break;
@@ -51,13 +50,44 @@ public class GameNetwork : NetworkBehaviour
 
     void Update()
     {
-        DecrementGameTime();
-        
-        // DEBUG
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // TODO: move this out to classes and not enum check
+        switch (m_GameState.Value)
         {
-            EndRound();
+            case GameState.Start:
+            case GameState.Lobby:
+                if (m_EnoughPlayers.Value)
+                {
+                    DecrementLobbyTime();
+                }
+                break;
+            case GameState.Playing:
+                DecrementGameTime();
+                break;
+            case GameState.Pause:
+                break;
+            case GameState.EndRound:
+                GameManager.EndRound();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
+    }
+
+    void DecrementLobbyTime()
+    {
+        if (IsOwner)
+        {
+            if (m_LobbyTimer.Value > 0)
+            {
+                m_LobbyTimer.Value -= Time.deltaTime;
+                GameData.LobbyTimer = m_LobbyTimer.Value;
+            }
+            else 
+            {
+                StartGame();
+            }
+        }
+        GameData.LobbyTimer = m_LobbyTimer.Value;
     }
     
     void DecrementGameTime()
@@ -82,6 +112,25 @@ public class GameNetwork : NetworkBehaviour
         if (IsOwner)
         {
             m_GameState.Value = GameState.EndRound;
+        }
+    }
+    
+    /// <summary>
+    /// Base call to start the game!
+    /// </summary>
+    public void StartGame()
+    {
+        if (IsOwner)
+        {
+            m_GameState.Value = GameState.Playing;
+        }
+    }
+
+    public void HaveEnoughPlayers()
+    {
+        if (IsOwner)
+        {
+            m_EnoughPlayers.Value = true;
         }
     }
 }

@@ -2,11 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
     GameObject StartPanel;
+    
+    [SerializeField]
+    GameObject LobbyPanel;
     
     [SerializeField]
     GameObject GamePanel;
@@ -18,10 +22,13 @@ public class UIManager : MonoBehaviour
     GameDataScriptableObject GameData;
     
     [SerializeField]
+    TextMeshProUGUI LobbyTimerText;
+    
+    [SerializeField]
     TextMeshProUGUI TimerText;
 
     [SerializeField]
-    TextMeshProUGUI[] m_PlayerScores;
+    TextMeshProUGUI[] PlayerScores;
 
     // readonly bool[] m_HasRegistered = {false, false, false, false};
     
@@ -29,34 +36,39 @@ public class UIManager : MonoBehaviour
     {
         { 0, "1st" }, { 1, "2nd" }, { 2, "3rd" }, { 3, "4th" }
     };
-
-    void Start()
-    {
-        foreach (var player in GameData.Players)
-        {
-            RegisterNewPlayer(player.Key);
-        }
-    }
     
     public void RegisterNewPlayer(int id)
     {
-        // TODO: remove inactive player scores on game start
-        foreach (var player in GameData.Players)
-        {
-            m_PlayerScores[player.Key].SetText("0");
-            GameData.Players[player.Key].OnScoreChange += (newVal) => { m_PlayerScores[player.Key].SetText(newVal.ToString()); }; 
-        }
-
-        for (int i = GameData.Players.Count; i < Utils.k_MaxPlayers; i++)
-        {
-            m_PlayerScores[i].gameObject.SetActive(false);
-        }
+        Debug.Log($"In UIManager, registering player {id}");
+        // Lobby Panel
+        LobbyPanel.transform.GetChild(id).gameObject.SetActive(true);
+        
+        // Game Panel
+        var parentScore = PlayerScores[id].transform.parent.gameObject; 
+        PlayerScores[id].SetText("0");
+        GameData.Players[id].OnScoreChange += (newVal) => { PlayerScores[id].SetText(newVal.ToString()); };
+        parentScore.SetActive(true);    
     }
     
     // Update is called once per frame
     void Update()
     {
-        TimerText.SetText(GameData.RuntimeTimer.ToString("F"));
+        if (LobbyPanel.activeSelf)
+        {
+            LobbyTimerText.SetText($"Time until game starts: {GameData.LobbyTimer:F}");
+        }
+
+        if (GamePanel.activeSelf)
+        {
+            TimerText.SetText(GameData.RuntimeTimer.ToString("F"));
+        }
+    }
+    
+    public void StartGame()
+    {
+        // TODO: transitions
+        LobbyPanel.SetActive(false);
+        GamePanel.SetActive(true);
     }
 
     public void EndGame()
@@ -108,5 +120,10 @@ public class UIManager : MonoBehaviour
             var place = parent.GetChild(i);
             place.gameObject.SetActive(false);
         }
+    }
+
+    public void StartLobbyCountdown()
+    {
+        LobbyTimerText.gameObject.SetActive(true);
     }
 }
