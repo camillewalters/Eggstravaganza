@@ -9,7 +9,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
 
     readonly NetworkVariable<PlayerScoreData> m_Score = new(writePerm: NetworkVariableWritePermission.Owner);
 
-    // TODO: why can't I serialize an array omg
+    // TODO: why can't I serialize an array easily omg sorry
     readonly NetworkVariable<PlayerRegisterData> m_Player0Registered =
         new(writePerm: NetworkVariableWritePermission.Owner);
     readonly NetworkVariable<PlayerRegisterData> m_Player1Registered =

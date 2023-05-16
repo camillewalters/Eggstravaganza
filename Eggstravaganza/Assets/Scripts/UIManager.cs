@@ -22,6 +22,9 @@ public class UIManager : MonoBehaviour
     GameDataScriptableObject GameData;
     
     [SerializeField]
+    TextMeshProUGUI LobbyTimerText;
+    
+    [SerializeField]
     TextMeshProUGUI TimerText;
 
     [SerializeField]
@@ -50,7 +53,15 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        TimerText.SetText(GameData.RuntimeTimer.ToString("F"));
+        if (LobbyPanel.activeSelf)
+        {
+            LobbyTimerText.SetText(GameData.LobbyTimer.ToString("F"));
+        }
+
+        if (GamePanel.activeSelf)
+        {
+            TimerText.SetText(GameData.RuntimeTimer.ToString("F"));
+        }
     }
     
     public void StartGame()
@@ -109,5 +120,10 @@ public class UIManager : MonoBehaviour
             var place = parent.GetChild(i);
             place.gameObject.SetActive(false);
         }
+    }
+
+    public void StartLobbyCountdown()
+    {
+        LobbyTimerText.gameObject.SetActive(true);
     }
 }

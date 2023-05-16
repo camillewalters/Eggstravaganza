@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 9aa8ed67591432941bb76f12eb23ff91, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -37,8 +37,8 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_Sun: {fileID: 1809495007}
+  m_IndirectSpecularColor: {r: 0.38317412, g: 0.53448117, b: 0.6325048, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -19719,7 +19719,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -20399,6 +20399,7 @@ MonoBehaviour:
   GamePanel: {fileID: 262580571}
   ResultsPanel: {fileID: 114616221}
   GameData: {fileID: 11400000, guid: 610a9111475b5b030a18afcee12ac774, type: 2}
+  LobbyTimerText: {fileID: 7696702354476653314}
   TimerText: {fileID: 1373648344}
   PlayerScores:
   - {fileID: 1883273113}
@@ -25054,3 +25055,15 @@ PrefabInstance:
       objectReference: {fileID: 2121383473}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb9d9d7976bb7d108a16cb2fdd0f5e60, type: 3}
+--- !u!114 &7696702354476653314 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8081143807557798343, guid: eb9d9d7976bb7d108a16cb2fdd0f5e60,
+    type: 3}
+  m_PrefabInstance: {fileID: 7696702354476653313}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,12 +12,15 @@ public class GameNetwork : NetworkBehaviour
     [SerializeField]
     GameDataScriptableObject GameData;
 
+    readonly NetworkVariable<bool> m_EnoughPlayers = new(writePerm: NetworkVariableWritePermission.Server);
+    readonly NetworkVariable<float> m_LobbyTimer = new(writePerm: NetworkVariableWritePermission.Server);
     readonly NetworkVariable<float> m_GameTimer = new(writePerm: NetworkVariableWritePermission.Server);
     readonly NetworkVariable<GameState> m_GameState = new(writePerm: NetworkVariableWritePermission.Server);
 
     public override void OnNetworkSpawn()
     {
-        m_GameTimer.Value = GameData.InitialTimer;
+        m_GameTimer.Value = GameData.InitialGameTimer;
+        m_LobbyTimer.Value = GameData.InitialLobbyTimer;
         // TODO: fix initial state
         m_GameState.Value = GameState.Lobby;
         m_GameState.OnValueChanged += OnStateChange;
@@ -53,6 +55,10 @@ public class GameNetwork : NetworkBehaviour
         {
             case GameState.Start:
             case GameState.Lobby:
+                if (m_EnoughPlayers.Value)
+                {
+                    DecrementLobbyTime();
+                }
                 break;
             case GameState.Playing:
                 DecrementGameTime();
@@ -65,6 +71,23 @@ public class GameNetwork : NetworkBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
+    }
+
+    void DecrementLobbyTime()
+    {
+        if (IsOwner)
+        {
+            if (m_LobbyTimer.Value > 0)
+            {
+                m_LobbyTimer.Value -= Time.deltaTime;
+                GameData.LobbyTimer = m_LobbyTimer.Value;
+            }
+            else 
+            {
+                StartGame();
+            }
+        }
+        GameData.LobbyTimer = m_LobbyTimer.Value;
     }
     
     void DecrementGameTime()
@@ -92,11 +115,22 @@ public class GameNetwork : NetworkBehaviour
         }
     }
     
+    /// <summary>
+    /// Base call to start the game!
+    /// </summary>
     public void StartGame()
     {
         if (IsOwner)
         {
             m_GameState.Value = GameState.Playing;
+        }
+    }
+
+    public void HaveEnoughPlayers()
+    {
+        if (IsOwner)
+        {
+            m_EnoughPlayers.Value = true;
         }
     }
 }
