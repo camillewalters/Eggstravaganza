@@ -1,5 +1,5 @@
 using System;
-using UnityEngine.Serialization;
+using Unity.Netcode;
 
 [Serializable]
 public class PlayerData
