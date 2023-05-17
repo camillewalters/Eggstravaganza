@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
     public float speed = 5f;
     public float lerpParam = 10f;
     public Transform body;
+    Rigidbody rb;
+    Transform eggLocation;
+    public BoxCollider eggHitbox;
 
     public PlayerInputActions playerControls;
 
@@ -16,7 +19,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 lookValue;
 
     public List<GameObject> eggInventory;
-    private float stunTime = 0f;
+    private float stunTime = 2f;
     bool isStunned = false;
 
     const int throwForwardFactor = 20;
@@ -37,6 +40,9 @@ public class PlayerController : MonoBehaviour
         interact.performed += Interact;
 
         playerControls.Player.Look.performed += LookPerformed;
+
+        rb = GetComponent<Rigidbody>();
+        eggLocation = body.Find("EggLocation");
     }
     private void OnDisable()
     {
@@ -97,13 +103,10 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Move()
-    {
+    { 
         Vector2 movementDirection = move.ReadValue<Vector2>();
         Vector3 movement = new Vector3(movementDirection.x, 0f, movementDirection.y);
-        movement.Normalize();
-
-        //Move the player
-        transform.position = transform.position + movement * speed * Time.deltaTime;
+        rb.AddForce(movement * speed);
 
         Vector3 rotation = new Vector3(lookValue.x, 0f, lookValue.y);
         rotation.Normalize();
@@ -135,7 +138,7 @@ public class PlayerController : MonoBehaviour
             eggToThrow.transform.parent = null;//unparent
 
             //throw
-            eggRb.velocity = body.transform.forward * throwForwardFactor+ body.transform.up * throwUpwardFactor;
+            eggRb.velocity = rb.transform.forward * throwForwardFactor+ rb.transform.up * throwUpwardFactor;
             eggInventory.Remove(eggToThrow);
 
             EggBehavior eggBehavior = eggToThrow.GetComponent<EggBehavior>();
@@ -157,12 +160,12 @@ public class PlayerController : MonoBehaviour
 
         eggRb.isKinematic = true;
 
-        eggToBePickedUp.transform.parent = body;
+        eggToBePickedUp.transform.parent = gameObject.transform;
     }
     
     private Vector3 NextEggHoldLocation()
     {
-        var basePosition = body.Find("EggLocation").transform.position;
+        var basePosition = eggLocation.transform.position;
         var nextLocation = basePosition + new Vector3(0, 0.4f * (eggInventory.Count - 1), 0);//approx height of egg
         return nextLocation;
     }
