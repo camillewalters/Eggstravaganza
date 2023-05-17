@@ -21,6 +21,8 @@ public class PlayerScoreNetwork : NetworkBehaviour
 
     readonly Dictionary<int, NetworkVariable<PlayerRegisterData>> m_PlayerRegisteredMap = new();
 
+    GameObject[] m_Prefabs;
+    
     void Awake()
     {
         m_PlayerRegisteredMap.Add(0, m_Player0Registered);
@@ -32,7 +34,9 @@ public class PlayerScoreNetwork : NetworkBehaviour
         {
             player.Value.OnValueChanged += OnPlayerRegistered;
         }
-
+        
+        m_Prefabs = Resources.LoadAll<GameObject>("Hats");
+        AssignHat();
         m_Score.OnValueChanged += OnScoreUpdate;
     }
 
@@ -120,6 +124,12 @@ public class PlayerScoreNetwork : NetworkBehaviour
             };
         }
         GameData.UpdatePlayerScore(m_Score.Value);
+    }
+
+    void AssignHat()
+    {
+        var hat = Instantiate(m_Prefabs[NetworkManager.LocalClientId]);
+        hat.transform.parent = this.transform.gameObject.transform.GetChild(3);
     }
 
     public struct PlayerScoreData : INetworkSerializable
