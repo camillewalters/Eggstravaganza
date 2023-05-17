@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     private InputAction move;
     private InputAction interact;
     private Vector2 lookValue;
+    Rigidbody m_Rigidbody;
 
     public int[] eggInventory; //temporarily using an int, use Egg class later
 
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerControls = new PlayerInputActions();
+        m_Rigidbody = GetComponent<Rigidbody>();
     }
     private void OnEnable()
     {
@@ -79,7 +81,8 @@ public class PlayerController : MonoBehaviour
         movement.Normalize();
 
         //Move the player
-        transform.position = transform.position + movement * speed * Time.deltaTime;
+        // transform.position = transform.position + movement * speed * Time.deltaTime;
+        m_Rigidbody.AddForce(movement * speed);
 
         Vector3 rotation = new Vector3(lookValue.x, 0f, lookValue.y);
         rotation.Normalize();
