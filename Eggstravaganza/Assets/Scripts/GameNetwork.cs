@@ -26,7 +26,7 @@ public class GameNetwork : NetworkBehaviour
     float maxEggSpawnTime = 8;
     float m_TimeRemaining;
 
-    void Awake()
+    void Start()
     {
         m_EggSpawner = this.gameObject.GetComponent<EggSpawner>();
         m_TimeRemaining = Random.Range(0, maxEggSpawnTime);
@@ -35,6 +35,7 @@ public class GameNetwork : NetworkBehaviour
         m_EggToSpawnIndex.Value = m_EggSpawner.ChooseEggToSpawn();
         m_EggSpawnPosition.Value = m_EggSpawner.ChooseSpawnPosition();
     }
+
     public override void OnNetworkSpawn()
     {
         m_GameTimer.Value = GameData.InitialGameTimer;
@@ -80,6 +81,7 @@ public class GameNetwork : NetworkBehaviour
                 break;
             case GameState.Playing:
                 DecrementGameTime();
+                SpawnCountdown();
                 break;
             case GameState.Pause:
                 break;
@@ -89,7 +91,6 @@ public class GameNetwork : NetworkBehaviour
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        SpawnCountdown();
     }
 
     void DecrementLobbyTime()
@@ -133,6 +134,25 @@ public class GameNetwork : NetworkBehaviour
             m_GameState.Value = GameState.EndRound;
         }
     }
+    
+    /// <summary>
+    /// Base call to start the game!
+    /// </summary>
+    public void StartGame()
+    {
+        if (IsOwner)
+        {
+            m_GameState.Value = GameState.Playing;
+        }
+    }
+
+    public void HaveEnoughPlayers()
+    {
+        if (IsOwner)
+        {
+            m_EnoughPlayers.Value = true;
+        }
+    }
 
     void SpawnCountdown()
     {
@@ -171,25 +191,6 @@ public class GameNetwork : NetworkBehaviour
         if (!IsOwner)
         {
             m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
-        }
-    }
-
-    /// <summary>
-    /// Base call to start the game!
-    /// </summary>
-    public void StartGame()
-    {
-        if (IsOwner)
-        {
-            m_GameState.Value = GameState.Playing;
-        }
-    }
-
-    public void HaveEnoughPlayers()
-    {
-        if (IsOwner)
-        {
-            m_EnoughPlayers.Value = true;
         }
     }
 }
