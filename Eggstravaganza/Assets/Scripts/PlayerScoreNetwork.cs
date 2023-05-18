@@ -162,8 +162,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
 
     void AssignHat(int index)
     {
-        var hat = Instantiate(m_Prefabs[index]);
-        hat.transform.parent = this.transform.gameObject.transform.GetChild(3);
+        Instantiate(m_Prefabs[index], transform.GetChild(3), true);
     }
 
     public struct PlayerScoreData : INetworkSerializable
