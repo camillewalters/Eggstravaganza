@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -23,6 +24,9 @@ public class PlayerScoreNetwork : NetworkBehaviour
     
     int m_LocalClientID = -1;
     GameObject[] m_Prefabs;
+    readonly NetworkVariable<int> m_Id = new();
+
+    // Dictionary<int, GameObject> PlayersAndIds = new Dictionary<int, GameObject>();
     
     void Awake()
     {
@@ -37,8 +41,16 @@ public class PlayerScoreNetwork : NetworkBehaviour
         }
         
         m_Prefabs = Resources.LoadAll<GameObject>("Hats");
-        AssignHat();
         m_Score.OnValueChanged += OnScoreUpdate;
+        m_Id.OnValueChanged += OnIdUpdate;
+    }
+
+    public override void OnDestroy() {
+        m_Id.OnValueChanged -= OnIdUpdate;
+    }
+
+    private void OnIdUpdate(int prev, int next) {
+        AssignHat(next);
     }
 
     void OnScoreUpdate(PlayerScoreData _, PlayerScoreData next)
@@ -66,6 +78,23 @@ public class PlayerScoreNetwork : NetworkBehaviour
         {
             RegisterNewPlayer(m_LocalClientID);
         }
+        
+        if (IsOwner)
+        {
+            Debug.Log("i am the owner!!!");
+            // PlayersAndIds[m_LocalClientID] = this.transform.gameObject;
+            
+            CommitNetworkIdServerRpc(m_LocalClientID);
+        }
+        else
+        {
+            AssignHat(m_Id.Value);
+        }
+    }
+
+    [ServerRpc]
+    private void CommitNetworkIdServerRpc(int id) {
+        m_Id.Value = id;
     }
     
     /// <summary>
@@ -135,9 +164,10 @@ public class PlayerScoreNetwork : NetworkBehaviour
         GameData.UpdatePlayerScore(m_Score.Value);
     }
 
-    void AssignHat()
+    void AssignHat(int index)
     {
-        var hat = Instantiate(m_Prefabs[NetworkManager.LocalClientId]);
+        Debug.Log($"My client ID from assign hat is {index}");
+        var hat = Instantiate(m_Prefabs[index]);
         hat.transform.parent = this.transform.gameObject.transform.GetChild(3);
     }
 
