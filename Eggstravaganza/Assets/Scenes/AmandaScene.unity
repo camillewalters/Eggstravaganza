@@ -10818,6 +10818,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 990121697}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &996645242 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2278204393655919064, guid: acae2117f5149bdba95a85f80635500d,
+    type: 3}
+  m_PrefabInstance: {fileID: 2278204393286268973}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &999480895
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24032,12 +24038,29 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 2278204393286268973}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 996645242}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bcaff5fc7fc2454cbdad482ffb4792a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2121383477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996645242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bb152eeefb142b4ba3247598b5d14aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eggs:
+  - prefab: {fileID: 1000012343480272, guid: 9425302b7c44a194bb8782c22588bfe2, type: 3}
+    chance: 100
+    weight: 0
+  spawnAreaScale: 1
 --- !u!1001 &2125640301
 PrefabInstance:
   m_ObjectHideFlags: 0
