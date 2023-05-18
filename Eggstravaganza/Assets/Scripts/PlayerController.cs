@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public Transform body;
     Rigidbody rb;
     Transform eggLocation;
+    TextMeshProUGUI m_PlayerText;
     public BoxCollider eggHitbox;
 
     public PlayerInputActions playerControls;
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         eggLocation = body.Find("EggLocation");
+        m_PlayerText = transform.Find("Canvas/PlayerText").GetComponent<TextMeshProUGUI>();
     }
     private void OnDisable()
     {
@@ -187,5 +190,16 @@ public class PlayerController : MonoBehaviour
         isStunned = true;
         yield return new WaitForSeconds(stunTime);
         isStunned = false;
+    }
+
+    public void AssignPlayerText(int id)
+    {
+        Debug.Log($"assigning id {id}");
+        m_PlayerText.SetText($"Player {id}");
+    }
+
+    public void StartGame()
+    {
+        m_PlayerText.gameObject.SetActive(false);
     }
 }
