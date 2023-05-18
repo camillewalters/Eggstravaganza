@@ -21,6 +21,8 @@ public class PlayerScoreNetwork : NetworkBehaviour
 
     readonly Dictionary<int, NetworkVariable<PlayerRegisterData>> m_PlayerRegisteredMap = new();
 
+    int m_LocalClientID = -1;
+
     void Awake()
     {
         m_PlayerRegisteredMap.Add(0, m_Player0Registered);
@@ -46,27 +48,35 @@ public class PlayerScoreNetwork : NetworkBehaviour
 
     void OnPlayerRegistered(PlayerRegisterData _, PlayerRegisterData next)
     {
-        RegisterNewPlayer((int)next.ID);
+        if (!IsOwner && IsClient || IsServer && (int)next.ID != -1)
+        {
+            RegisterNewPlayer((int)next.ID);
+        }
     }
 
     public override void OnNetworkSpawn()
     {
-        var localID = (int)NetworkManager.LocalClientId;
-        Debug.Log($"My client ID is {localID}");
-        RegisterNewPlayer(localID);
+        // Manually decrement by 1 assuming the server is 0
+        m_LocalClientID = (int)NetworkManager.LocalClientId - 1;
+        Debug.Log($"My client ID is {m_LocalClientID}");
+        if (IsClient)
+        {
+            RegisterNewPlayer(m_LocalClientID);
+        }
     }
-
+    
     /// <summary>
     /// Assign NetworkVariable to register joining player, update in local GameManager
     /// </summary>
     /// <param name="id"></param>
     void RegisterNewPlayer(int id)
     {
+        Debug.Log($"Registering player {id}");
         if (IsOwner)
         {
             var reg = new PlayerRegisterData()
             {
-                ID = NetworkManager.LocalClientId,
+                ID = (ulong)m_LocalClientID,
                 // Name = $"Player {localID}" // TODO: add this
             };
             switch (id)
@@ -91,9 +101,9 @@ public class PlayerScoreNetwork : NetworkBehaviour
             // Locally register all other already-registered players
             for (int i = 0; i < Utils.k_MaxPlayers; i++)
             {
-                if (m_PlayerRegisteredMap[i] != null)
+                if (m_PlayerRegisteredMap[i] != null && (int)m_PlayerRegisteredMap[i].Value.ID == i)
                 {
-                    GameManager.Instance.RegisterNewPlayer((int)m_PlayerRegisteredMap[i].Value.ID);    
+                    GameManager.Instance.RegisterNewPlayer(i);
                 }
             }
         }
@@ -115,7 +125,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
         {
             m_Score.Value = new PlayerScoreData()
             {
-                ID = NetworkManager.LocalClientId,
+                ID = (ulong)m_LocalClientID,
                 Score = m_Score.Value.Score + amt
             };
         }

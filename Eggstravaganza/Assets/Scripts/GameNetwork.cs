@@ -171,6 +171,7 @@ public class GameNetwork : NetworkBehaviour
 
             // Spawn chosen egg
             RequestSpawnEggServerRpc();
+            SpawnEggClientRpc();
             m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
     
             // Choose next egg to spawn and its position
