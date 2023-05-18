@@ -26,6 +26,7 @@ public class EggBehavior: MonoBehaviour
         {
             isBeingThrown = false;
             isBeingHeld = false;
+            droppedBy = null;
         }
     }
 }
