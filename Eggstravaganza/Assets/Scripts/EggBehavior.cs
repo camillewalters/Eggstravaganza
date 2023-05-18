@@ -5,9 +5,21 @@ public class EggBehavior: MonoBehaviour
 	public bool isBeingHeld = false;
 	public bool isBeingThrown = false;
 
+    Rigidbody rb;
+
+    private void Awake()
+    {
+         rb = GetComponent<Rigidbody>();
+    }
+
     private void Update()
     {
-        if (transform.position.y == 0) //whenever it hits the ground its fair game to be picked up and won't damage anyone
+        rb.detectCollisions = !isBeingHeld;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.transform.GetComponent<PlayerController>() == null)
         {
             isBeingThrown = false;
             isBeingHeld = false;

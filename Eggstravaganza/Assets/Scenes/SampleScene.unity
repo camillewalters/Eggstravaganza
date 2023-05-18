@@ -201,7 +201,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 5.92, z: -0.42}
+  m_LocalPosition: {x: 0, y: 20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -368,6 +368,7 @@ GameObject:
   - component: {fileID: 811228024}
   - component: {fileID: 811228023}
   - component: {fileID: 811228022}
+  - component: {fileID: 811228026}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -454,6 +455,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &811228026
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 811228021}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 2.220446e-16, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,6 +654,8 @@ MonoBehaviour:
     chance: 100
     weight: 0
   spawnAreaScale: 1
+  timeRemaining: 0
+  timerIsRunning: 0
 --- !u!4 &858244813
 Transform:
   m_ObjectHideFlags: 0
@@ -655,12 +671,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &1416857086 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 1416857086, guid: c73ae6621f8832748a78dfb8aec6dd12,
-    type: 3}
-  m_PrefabInstance: {fileID: 1513189137}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1513189137
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -670,11 +680,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1416857084, guid: c73ae6621f8832748a78dfb8aec6dd12, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1416857086, guid: c73ae6621f8832748a78dfb8aec6dd12, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1416857086, guid: c73ae6621f8832748a78dfb8aec6dd12, type: 3}
+      propertyPath: m_Size.y
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1416857086, guid: c73ae6621f8832748a78dfb8aec6dd12, type: 3}
       propertyPath: m_Size.z
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 2732684518155842968, guid: c73ae6621f8832748a78dfb8aec6dd12,
         type: 3}
@@ -736,37 +754,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4264119811822447710, guid: c73ae6621f8832748a78dfb8aec6dd12,
+    - target: {fileID: 4376761686909421990, guid: c73ae6621f8832748a78dfb8aec6dd12,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.145
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4812881362146542578, guid: c73ae6621f8832748a78dfb8aec6dd12,
         type: 3}
-      propertyPath: m_Mass
-      value: 2
+      propertyPath: m_Drag
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4812881362146542578, guid: c73ae6621f8832748a78dfb8aec6dd12,
         type: 3}
       propertyPath: m_Constraints
       value: 80
       objectReference: {fileID: 0}
-    - target: {fileID: 4812881362146542578, guid: c73ae6621f8832748a78dfb8aec6dd12,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7109004259494708383, guid: c73ae6621f8832748a78dfb8aec6dd12,
         type: 3}
       propertyPath: speed
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 7109004259494708383, guid: c73ae6621f8832748a78dfb8aec6dd12,
-        type: 3}
-      propertyPath: eggHitbox
-      value: 
-      objectReference: {fileID: 1416857086}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1902745435, guid: c73ae6621f8832748a78dfb8aec6dd12, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c73ae6621f8832748a78dfb8aec6dd12, type: 3}
 --- !u!1 &1902745429 stripped
 GameObject:
@@ -785,5 +794,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 0.71357095, y: 1.0306934, z: 0.6474403}
+  m_Center: {x: 0.0036024451, y: 0.52670366, z: -0.019541621}

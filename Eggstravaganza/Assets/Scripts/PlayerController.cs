@@ -60,9 +60,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-       // Debug.Log(other.gameObject);
+     public void HandleEggHitboxCollision(Collider other)
+     {
         EggBehavior eggBehavior = other.gameObject.GetComponent<EggBehavior>();
         if(eggBehavior != null)
         {
@@ -73,13 +72,9 @@ public class PlayerController : MonoBehaviour
             }
             if (eggBehavior.isBeingThrown)
             {
-                LoseEgg();
+                StartCoroutine(LoseEgg());
             }
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
     }
 
     private void LookPerformed(InputAction.CallbackContext context)
@@ -107,7 +102,7 @@ public class PlayerController : MonoBehaviour
         Vector2 movementDirection = move.ReadValue<Vector2>();
         Vector3 movement = new Vector3(movementDirection.x, 0f, movementDirection.y);
         rb.AddForce(movement * speed);
-
+        
         Vector3 rotation = new Vector3(lookValue.x, 0f, lookValue.y);
         rotation.Normalize();
 
@@ -143,6 +138,7 @@ public class PlayerController : MonoBehaviour
 
             EggBehavior eggBehavior = eggToThrow.GetComponent<EggBehavior>();
             eggBehavior.isBeingThrown = true;
+            eggBehavior.isBeingHeld = false;
 
         }      
 
@@ -150,15 +146,16 @@ public class PlayerController : MonoBehaviour
 
     private void PickUpEgg(GameObject eggToBePickedUp)
     {
-        eggInventory.Add(eggToBePickedUp);
+        var eggRb = eggToBePickedUp.GetComponent<Rigidbody>();
+
+        eggRb.isKinematic = true;
+        eggInventory.Add(eggToBePickedUp);       
 
         //workshop these two
         eggToBePickedUp.transform.position = NextEggHoldLocation();
         //eggToBePickedUp.transform.position = body.Find("EggLocation").transform.position;
 
-        var eggRb = eggToBePickedUp.GetComponent<Rigidbody>();
-
-        eggRb.isKinematic = true;
+        
 
         eggToBePickedUp.transform.parent = gameObject.transform;
     }
