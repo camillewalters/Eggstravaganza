@@ -20,7 +20,7 @@ public class EggSpawner : MonoBehaviour
 
     [SerializeField]
     float spawnAreaScale = 1;
-    
+
     double m_AccumulatedWeights;
     System.Random m_Rand = new();
 
@@ -67,4 +67,38 @@ public class EggSpawner : MonoBehaviour
             egg.weight = m_AccumulatedWeights;
         }
     }
+    // TODO: Uncomment this only for testing purposes, delete and call SpawnEgg() in GameManager instead after it is created 
+    /*
+    public float timeRemaining;
+    public bool timerIsRunning;
+    const float k_SpawnInterval = 20;
+
+    void Start()
+    {
+        timeRemaining = k_SpawnInterval;
+        timerIsRunning = true;
+    }
+
+    void Update()
+    {
+        if (timerIsRunning)
+        {
+            if (timeRemaining > 0)
+            {
+                timeRemaining -= Time.fixedDeltaTime;
+            }
+            else
+            {
+                SpawnEgg();
+                timeRemaining = 0;
+                timerIsRunning = false;
+            }
+        }
+        else
+        {
+            timeRemaining = k_SpawnInterval;
+            timerIsRunning = true;
+        }
+    }
+    */
 }
