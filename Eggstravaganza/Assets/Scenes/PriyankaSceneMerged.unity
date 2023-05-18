@@ -25064,13 +25064,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eggs:
+  - prefab: {fileID: 2788923454540253015, guid: 588a50506e140dd4ebf64dcd966efde7,
+      type: 3}
+    chance: 100
+    weight: 0
   - prefab: {fileID: 6045677848563783273, guid: 60c2aa6cfe0f5414e9a357275d37e6c3,
       type: 3}
     chance: 30
     weight: 0
-  - prefab: {fileID: 2788923454540253015, guid: 588a50506e140dd4ebf64dcd966efde7,
+  - prefab: {fileID: 798364573653956785, guid: e7887d0d1fb59c949af5751318905368, type: 3}
+    chance: 15
+    weight: 0
+  - prefab: {fileID: 247964489611032566, guid: f8a6403225a86d84b8e17b762520a4a0, type: 3}
+    chance: 15
+    weight: 0
+  - prefab: {fileID: 4994057441068806221, guid: 8585183cec6492642ab6970bc26e16b2,
       type: 3}
-    chance: 100
+    chance: 15
     weight: 0
   spawnAreaScale: 1
 --- !u!1001 &2474762617173418773
