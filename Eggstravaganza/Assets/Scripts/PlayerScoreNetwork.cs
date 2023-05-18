@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -20,7 +21,11 @@ public class PlayerScoreNetwork : NetworkBehaviour
         new(writePerm: NetworkVariableWritePermission.Owner);
 
     readonly Dictionary<int, NetworkVariable<PlayerRegisterData>> m_PlayerRegisteredMap = new();
-
+    
+    int m_LocalClientID = -1;
+    GameObject[] m_Prefabs;
+    public readonly NetworkVariable<int> m_Id = new();
+    
     void Awake()
     {
         m_PlayerRegisteredMap.Add(0, m_Player0Registered);
@@ -32,8 +37,19 @@ public class PlayerScoreNetwork : NetworkBehaviour
         {
             player.Value.OnValueChanged += OnPlayerRegistered;
         }
-
+        
+        m_Prefabs = Resources.LoadAll<GameObject>("Hats");
+        m_Id.Value = -1;
         m_Score.OnValueChanged += OnScoreUpdate;
+        m_Id.OnValueChanged += OnIdUpdate;
+    }
+
+    public override void OnDestroy() {
+        m_Id.OnValueChanged -= OnIdUpdate;
+    }
+
+    private void OnIdUpdate(int prev, int next) {
+        AssignHat(next);
     }
 
     void OnScoreUpdate(PlayerScoreData _, PlayerScoreData next)
@@ -46,27 +62,49 @@ public class PlayerScoreNetwork : NetworkBehaviour
 
     void OnPlayerRegistered(PlayerRegisterData _, PlayerRegisterData next)
     {
-        RegisterNewPlayer((int)next.ID);
+        if (!IsOwner && IsClient || IsServer && (int)next.ID != -1)
+        {
+            RegisterNewPlayer((int)next.ID);
+        }
     }
 
     public override void OnNetworkSpawn()
     {
-        var localID = (int)NetworkManager.LocalClientId;
-        Debug.Log($"My client ID is {localID}");
-        RegisterNewPlayer(localID);
+        // Manually decrement by 1 assuming the server is 0
+        m_LocalClientID = (int)NetworkManager.LocalClientId - 1;
+        Debug.Log($"My client ID is {m_LocalClientID}");
+        if (IsClient)
+        {
+            RegisterNewPlayer(m_LocalClientID);
+        }
+        
+        if (IsOwner)
+        {
+            CommitNetworkIdServerRpc(m_LocalClientID);
+        }
+        else
+        {
+            AssignHat(m_Id.Value);
+        }
     }
 
+    [ServerRpc]
+    private void CommitNetworkIdServerRpc(int id) {
+        m_Id.Value = id;
+    }
+    
     /// <summary>
     /// Assign NetworkVariable to register joining player, update in local GameManager
     /// </summary>
     /// <param name="id"></param>
     void RegisterNewPlayer(int id)
     {
+        Debug.Log($"Registering player {id}");
         if (IsOwner)
         {
             var reg = new PlayerRegisterData()
             {
-                ID = NetworkManager.LocalClientId,
+                ID = (ulong)m_LocalClientID,
                 // Name = $"Player {localID}" // TODO: add this
             };
             switch (id)
@@ -91,9 +129,9 @@ public class PlayerScoreNetwork : NetworkBehaviour
             // Locally register all other already-registered players
             for (int i = 0; i < Utils.k_MaxPlayers; i++)
             {
-                if (m_PlayerRegisteredMap[i] != null)
+                if (m_PlayerRegisteredMap[i] != null && (int)m_PlayerRegisteredMap[i].Value.ID == i)
                 {
-                    GameManager.Instance.RegisterNewPlayer((int)m_PlayerRegisteredMap[i].Value.ID);    
+                    GameManager.Instance.RegisterNewPlayer(i);
                 }
             }
         }
@@ -115,11 +153,16 @@ public class PlayerScoreNetwork : NetworkBehaviour
         {
             m_Score.Value = new PlayerScoreData()
             {
-                ID = NetworkManager.LocalClientId,
+                ID = (ulong)m_LocalClientID,
                 Score = m_Score.Value.Score + amt
             };
         }
         GameData.UpdatePlayerScore(m_Score.Value);
+    }
+
+    void AssignHat(int index)
+    {
+        Instantiate(m_Prefabs[index], transform.GetChild(3), true);
     }
 
     public struct PlayerScoreData : INetworkSerializable
