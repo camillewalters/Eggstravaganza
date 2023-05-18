@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;
+    public float speed = 80f;
     public float lerpParam = 10f;
     public Transform body;
     Rigidbody rb;
@@ -22,9 +22,9 @@ public class PlayerController : MonoBehaviour
     private float stunTime = 2f;
     bool isStunned = false;
 
-    const int throwForwardFactor = 20;
-    const int throwUpwardFactor = 5;
-    const int dropForwardFactor = -1; //negative so it goes backwards
+    public int throwForwardFactor = 20;
+    public int throwUpwardFactor = 5;
+    public int dropForwardFactor = -1; //negative so it goes backwards
 
     private void Awake()
     {
