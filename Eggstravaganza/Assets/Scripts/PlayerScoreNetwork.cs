@@ -41,6 +41,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
         }
         
         m_Prefabs = Resources.LoadAll<GameObject>("Hats");
+        m_Id.Value = -1;
         m_Score.OnValueChanged += OnScoreUpdate;
         m_Id.OnValueChanged += OnIdUpdate;
     }
