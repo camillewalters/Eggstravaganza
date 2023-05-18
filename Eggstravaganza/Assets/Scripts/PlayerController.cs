@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviour
                 PickUpEgg(other.gameObject);
                 eggBehavior.isBeingHeld = true;
             }
-            if (eggBehavior.isBeingThrown)
+            if (eggBehavior.isBeingThrown && eggBehavior.thrownBy != this)
             {
                 StartCoroutine(LoseEgg());
             }
@@ -139,6 +139,7 @@ public class PlayerController : MonoBehaviour
             EggBehavior eggBehavior = eggToThrow.GetComponent<EggBehavior>();
             eggBehavior.isBeingThrown = true;
             eggBehavior.isBeingHeld = false;
+            eggBehavior.thrownBy = this;
 
         }      
 
@@ -153,9 +154,6 @@ public class PlayerController : MonoBehaviour
 
         //workshop these two
         eggToBePickedUp.transform.position = NextEggHoldLocation();
-        //eggToBePickedUp.transform.position = body.Find("EggLocation").transform.position;
-
-        
 
         eggToBePickedUp.transform.parent = gameObject.transform;
     }

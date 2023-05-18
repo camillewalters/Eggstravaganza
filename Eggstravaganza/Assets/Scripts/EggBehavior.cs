@@ -7,6 +7,8 @@ public class EggBehavior: MonoBehaviour
 
     Rigidbody rb;
 
+    public PlayerController thrownBy;
+
     private void Awake()
     {
          rb = GetComponent<Rigidbody>();
@@ -19,7 +21,7 @@ public class EggBehavior: MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.GetComponent<PlayerController>() == null)
+        if (collision.transform.GetComponent<PlayerController>() == null)
         {
             isBeingThrown = false;
             isBeingHeld = false;

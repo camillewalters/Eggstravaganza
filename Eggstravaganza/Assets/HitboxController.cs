@@ -14,7 +14,6 @@ public class HitboxController : MonoBehaviour
     // Update is called once per frame
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("collided");
         playerController.HandleEggHitboxCollision(other);
     }
 }
