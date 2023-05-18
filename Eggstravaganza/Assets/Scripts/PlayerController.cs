@@ -24,7 +24,7 @@ public class PlayerController : MonoBehaviour
 
     public int throwForwardFactor = 20;
     public int throwUpwardFactor = 5;
-    public int dropForwardFactor = -1; //negative so it goes backwards
+    public int dropForwardFactor = -3; //negative so it goes backwards
 
     private void Awake()
     {
@@ -65,7 +65,7 @@ public class PlayerController : MonoBehaviour
         EggBehavior eggBehavior = other.gameObject.GetComponent<EggBehavior>();
         if(eggBehavior != null)
         {
-            if (!eggBehavior.isBeingHeld && !eggBehavior.isBeingThrown)
+            if (!eggBehavior.isBeingHeld && !eggBehavior.isBeingThrown && eggBehavior.droppedBy != this)
             {
                 PickUpEgg(other.gameObject);
                 eggBehavior.isBeingHeld = true;
@@ -132,7 +132,8 @@ public class PlayerController : MonoBehaviour
             eggRb.isKinematic = false;
             eggToThrow.transform.parent = null;//unparent
 
-            //throw
+            //throw from lowest point
+            eggToThrow.transform.position = eggLocation.position; 
             eggRb.velocity = rb.transform.forward * throwForwardFactor+ rb.transform.up * throwUpwardFactor;
             eggInventory.Remove(eggToThrow);
 
@@ -152,7 +153,6 @@ public class PlayerController : MonoBehaviour
         eggRb.isKinematic = true;
         eggInventory.Add(eggToBePickedUp);       
 
-        //workshop these two
         eggToBePickedUp.transform.position = NextEggHoldLocation();
 
         eggToBePickedUp.transform.parent = gameObject.transform;
@@ -177,9 +177,13 @@ public class PlayerController : MonoBehaviour
             var eggRb = eggToRemove.GetComponent<Rigidbody>();
             eggRb.velocity = body.transform.forward * dropForwardFactor;//falls backwards with a bit of velocity
             eggRb.isKinematic = false;
+
+            EggBehavior eggBehavior = eggToRemove.GetComponent<EggBehavior>();
+            eggBehavior.isBeingHeld = false;
+            eggBehavior.droppedBy = this;
         }
 
-        //gets stunned (even if no egg in inventory? can change later)
+        //gets stunned
         isStunned = true;
         yield return new WaitForSeconds(stunTime);
         isStunned = false;

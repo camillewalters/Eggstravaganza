@@ -8,7 +8,7 @@ public class HitboxController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerController  = transform.parent.GetComponent<PlayerController>();
+        playerController  = GetComponentInParent<PlayerController>();
     }
 
     // Update is called once per frame

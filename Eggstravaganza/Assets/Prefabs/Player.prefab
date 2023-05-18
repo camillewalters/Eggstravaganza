@@ -494,7 +494,7 @@ MonoBehaviour:
   eggInventory: []
   throwForwardFactor: 20
   throwUpwardFactor: 5
-  dropForwardFactor: -1
+  dropForwardFactor: -5
 --- !u!114 &4603043774983027439
 MonoBehaviour:
   m_ObjectHideFlags: 0
