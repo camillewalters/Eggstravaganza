@@ -80,9 +80,6 @@ public class PlayerScoreNetwork : NetworkBehaviour
         
         if (IsOwner)
         {
-            Debug.Log("i am the owner!!!");
-            // PlayersAndIds[m_LocalClientID] = this.transform.gameObject;
-            
             CommitNetworkIdServerRpc(m_LocalClientID);
         }
         else
@@ -165,7 +162,6 @@ public class PlayerScoreNetwork : NetworkBehaviour
 
     void AssignHat(int index)
     {
-        Debug.Log($"My client ID from assign hat is {index}");
         var hat = Instantiate(m_Prefabs[index]);
         hat.transform.parent = this.transform.gameObject.transform.GetChild(3);
     }
