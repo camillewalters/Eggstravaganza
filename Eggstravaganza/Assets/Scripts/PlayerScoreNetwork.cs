@@ -24,7 +24,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
     
     int m_LocalClientID = -1;
     GameObject[] m_Prefabs;
-    readonly NetworkVariable<int> m_Id = new();
+    public readonly NetworkVariable<int> m_Id = new();
 
     // Dictionary<int, GameObject> PlayersAndIds = new Dictionary<int, GameObject>();
     
