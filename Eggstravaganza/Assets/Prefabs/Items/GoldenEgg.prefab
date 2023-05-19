@@ -144,3 +144,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isBeingHeld: 0
   isBeingThrown: 0
+  thrownBy: {fileID: 0}
+  droppedBy: {fileID: 0}
+  value: 3

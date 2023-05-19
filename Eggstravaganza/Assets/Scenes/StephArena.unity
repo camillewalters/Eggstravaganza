@@ -24173,6 +24173,13 @@ MonoBehaviour:
       type: 3}
     chance: 100
     weight: 0
+  - prefab: {fileID: 6045677848563783273, guid: 60c2aa6cfe0f5414e9a357275d37e6c3,
+      type: 3}
+    chance: 100
+    weight: 0
+  - prefab: {fileID: 798364573653956785, guid: e7887d0d1fb59c949af5751318905368, type: 3}
+    chance: 100
+    weight: 0
   spawnAreaScale: 1
   timeRemaining: 30
   timerIsRunning: 1

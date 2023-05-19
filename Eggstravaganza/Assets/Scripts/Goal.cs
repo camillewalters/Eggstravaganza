@@ -1,20 +1,13 @@
 using System;
-using Unity.Netcode;
 using UnityEngine;
 public class Goal : MonoBehaviour
 {
-    // TODO: Ensure the player matches their goals, hardcoded currently
+    // TODO: Ensure the player matches their goals, hardcoded for goals currently
     [SerializeField]
     int goalId;
 
-    void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log($"OnCollisionEnter {collision.gameObject.name}");
-    }
-
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter");
         // If not a player triggers, ignore
         var playerController = other.gameObject.GetComponent<PlayerController>();
         if (!playerController) return;
@@ -23,18 +16,24 @@ public class Goal : MonoBehaviour
         Debug.Log($"Player ID = {playerScoreNetwork.LocalClientID}");
         if (playerScoreNetwork.LocalClientID != goalId) return;
         
-        Debug.Log($"OnTriggerEnter {other.name}");
         var eggs = playerController.eggInventory;
         Debug.Log($"Player has {eggs.Count} eggs");
         var score = 0;
+        // Loop through every items player is holding
         foreach (var egg in eggs)
         {
-            // TODO: check the egg value
-            // score += egg<Egg>.value;
-            score += 1;
+            if (egg.TryGetComponent<EggBehavior>(out var comp))
+            {
+                // TODO: Store egg value somewhere proper in GO
+                score += comp.value;
+                Debug.Log($"Adding {comp.value} points");
+            }
+            // Destroy them at the goal
             Destroy(egg);
         }
-        // TODO: update score after calculating it
+        // Clear out inventory
+        playerController.eggInventory.Clear();
+        // Add score
         playerScoreNetwork.IncrementPlayerScore(score);
     }
 }
