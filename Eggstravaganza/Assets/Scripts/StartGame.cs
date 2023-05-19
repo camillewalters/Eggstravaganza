@@ -1,23 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class StartGame : MonoBehaviour
 {
-    Button startGameButton;
+    public TMP_InputField nameInputField;
+    public Button startGameButton;
     
     // Start is called before the first frame update
     void Start()
     {
-        startGameButton = this.gameObject.GetComponent<Button>();
         startGameButton.onClick.AddListener(StartNewGame);
+        startGameButton.interactable = false;
     }
 
-    void StartNewGame()
+    void Update()
+    {
+        startGameButton.interactable = nameInputField.text != "";
+    }
+
+    static void StartNewGame()
     {
         Debug.Log("Starting Game");
-        SceneManager.LoadScene("PriyankaSceneMerged"); // TODO: Change this
+        // TODO: Change this 
+        SceneManager.LoadScene("PriyankaSceneMerged"); 
     }
 }
