@@ -11,6 +11,9 @@ public class EggBehavior: MonoBehaviour
     //public PlayerControllerNetworked thrownByNet;
     public Object droppedBy;
 
+    [SerializeField]
+    public int value;
+
     private void Awake()
     {
          rb = GetComponent<Rigidbody>();

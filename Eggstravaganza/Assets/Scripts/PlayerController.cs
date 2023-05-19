@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public Transform body;
     Rigidbody rb;
     Transform eggLocation;
+    PlayerAnimatorController m_AnimatorController;
     public BoxCollider eggHitbox;
 
     public PlayerInputActions playerControls;
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         playerControls = new PlayerInputActions();
+        m_AnimatorController = GetComponent<PlayerAnimatorController>();
     }
     private void OnEnable()
     {
@@ -125,6 +127,8 @@ public class PlayerController : MonoBehaviour
     {
         if (eggInventory.Count > 0)
         {
+            m_AnimatorController.Throw();
+            
             //choose egg to throw
             GameObject eggToThrow = eggInventory[eggInventory.Count - 1];
             var eggRb = eggToThrow.GetComponent<Rigidbody>();

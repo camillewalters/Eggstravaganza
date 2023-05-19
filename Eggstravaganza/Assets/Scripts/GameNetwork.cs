@@ -30,19 +30,25 @@ public class GameNetwork : NetworkBehaviour
     {
         m_EggSpawner = this.gameObject.GetComponent<EggSpawner>();
         m_TimeRemaining = Random.Range(0, maxEggSpawnTime);
-        
-        // Choose first egg to spawn and its position
-        m_EggToSpawnIndex.Value = m_EggSpawner.ChooseEggToSpawn();
-        m_EggSpawnPosition.Value = m_EggSpawner.ChooseSpawnPosition();
     }
 
     public override void OnNetworkSpawn()
     {
+        // Choose first egg to spawn and its position
+        // Seemingly broken right now?
+        // m_EggToSpawnIndex.Value = m_EggSpawner.ChooseEggToSpawn();
+        // m_EggSpawnPosition.Value = m_EggSpawner.ChooseSpawnPosition();
+
+        // Need to manage game state on each client
+        m_GameState.OnValueChanged += OnStateChange;
+
+        // However, network variables should only be changed on server
+        if (!IsServer) return;
+
         m_GameTimer.Value = GameData.InitialGameTimer;
         m_LobbyTimer.Value = GameData.InitialLobbyTimer;
         // TODO: fix initial state
         m_GameState.Value = GameState.Lobby;
-        m_GameState.OnValueChanged += OnStateChange;
     }
     
     void OnStateChange(GameState prev, GameState next)
@@ -95,7 +101,7 @@ public class GameNetwork : NetworkBehaviour
 
     void DecrementLobbyTime()
     {
-        if (IsOwner)
+        if (IsServer)
         {
             if (m_LobbyTimer.Value > 0)
             {
@@ -112,7 +118,7 @@ public class GameNetwork : NetworkBehaviour
     
     void DecrementGameTime()
     {
-        if (IsOwner)
+        if (IsServer)
         {
             if (m_GameTimer.Value > 0)
             {
@@ -129,7 +135,7 @@ public class GameNetwork : NetworkBehaviour
 
     void EndRound()
     {
-        if (IsOwner)
+        if (IsServer)
         {
             m_GameState.Value = GameState.EndRound;
         }
@@ -140,7 +146,7 @@ public class GameNetwork : NetworkBehaviour
     /// </summary>
     public void StartGame()
     {
-        if (IsOwner)
+        if (IsServer)
         {
             m_GameState.Value = GameState.Playing;
         }
@@ -148,7 +154,7 @@ public class GameNetwork : NetworkBehaviour
 
     public void HaveEnoughPlayers()
     {
-        if (IsOwner)
+        if (IsServer)
         {
             m_EnoughPlayers.Value = true;
         }
@@ -156,9 +162,9 @@ public class GameNetwork : NetworkBehaviour
 
     void SpawnCountdown()
     {
-        if (!IsOwner)
+        if (!IsServer)
             return;
-        
+
         // Spawns an egg at a random time from 1 to maxEggSpawnTime seconds
         if (m_TimeRemaining > 0)
         {
@@ -189,7 +195,7 @@ public class GameNetwork : NetworkBehaviour
     [ClientRpc]
     void SpawnEggClientRpc()
     {
-        if (!IsOwner)
+        if (!IsServer)
         {
             m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
         }

@@ -1,8 +1,8 @@
 using System;
-using UnityEditor;
 #if UNITY_EDITOR
-using UnityEngine;
+using UnityEditor;
 #endif
+using UnityEngine;
 using Random = UnityEngine.Random;
 public class ItemsSpawn: MonoBehaviour
 {
