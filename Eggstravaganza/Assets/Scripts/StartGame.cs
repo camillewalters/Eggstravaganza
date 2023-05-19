@@ -25,6 +25,6 @@ public class StartGame : MonoBehaviour
     {
         Debug.Log("Starting Game");
         // TODO: Change this 
-        SceneManager.LoadScene("PriyankaSceneMerged"); 
+        SceneManager.LoadScene("MainScene"); 
     }
 }
