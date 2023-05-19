@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -32,7 +33,8 @@ public class EggSpawner : MonoBehaviour
     public void SpawnEgg(Vector3 spawnPosition, int index = 0)
     {
         var currentEggToSpawn = eggs[index];
-        Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
+        var egg = Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
+        // egg.GetComponent<NetworkObject>().Spawn();
         
         Debug.Log($"Spawned {currentEggToSpawn.prefab.name}!");
     }

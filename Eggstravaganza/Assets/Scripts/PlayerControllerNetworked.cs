@@ -47,7 +47,8 @@ public class PlayerControllerNetworked : NetworkBehaviour
     }
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) Destroy(this);
+        if (!IsOwner)
+            enabled = false;
     }
     private void OnDisable()
     {
@@ -169,7 +170,8 @@ public class PlayerControllerNetworked : NetworkBehaviour
         if (IsOwner)
         {
             Debug.Log("entering server rpc section");
-            PickUpEggServerRpc();
+            // PickUpEggServerRpc();
+            // GameNetwork.PickUpEggOnPlayer();
         }
     }
 

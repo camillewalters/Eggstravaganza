@@ -194,4 +194,10 @@ public class GameNetwork : NetworkBehaviour
             m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
         }
     }
+
+    [ServerRpc]
+    public static void PickUpEggOnPlayer(int playerId)
+    {
+        Debug.Log($"Called by {playerId}");
+    }
 }
