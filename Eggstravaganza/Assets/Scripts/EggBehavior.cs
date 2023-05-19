@@ -10,6 +10,9 @@ public class EggBehavior: MonoBehaviour
     public PlayerController thrownBy;
     public PlayerController droppedBy;
 
+    [SerializeField]
+    public int value;
+
     private void Awake()
     {
          rb = GetComponent<Rigidbody>();

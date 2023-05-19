@@ -22,7 +22,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
 
     readonly Dictionary<int, NetworkVariable<PlayerRegisterData>> m_PlayerRegisteredMap = new();
     
-    int m_LocalClientID = -1;
+    public int LocalClientID = -1;
     GameObject[] m_Prefabs;
     public readonly NetworkVariable<int> m_Id = new();
     
@@ -71,16 +71,16 @@ public class PlayerScoreNetwork : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         // Manually decrement by 1 assuming the server is 0
-        m_LocalClientID = (int)NetworkManager.LocalClientId - 1;
-        Debug.Log($"My client ID is {m_LocalClientID}");
+        LocalClientID = (int)NetworkManager.LocalClientId - 1;
+        Debug.Log($"My client ID is {LocalClientID}");
         if (IsClient)
         {
-            RegisterNewPlayer(m_LocalClientID);
+            RegisterNewPlayer(LocalClientID);
         }
         
         if (IsOwner)
         {
-            CommitNetworkIdServerRpc(m_LocalClientID);
+            CommitNetworkIdServerRpc(LocalClientID);
         }
         else
         {
@@ -104,7 +104,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
         {
             var reg = new PlayerRegisterData()
             {
-                ID = (ulong)m_LocalClientID,
+                ID = (ulong)LocalClientID,
                 // Name = $"Player {localID}" // TODO: add this
             };
             switch (id)
@@ -147,13 +147,13 @@ public class PlayerScoreNetwork : NetworkBehaviour
         }
     }
     
-    void IncrementPlayerScore(int amt)
+    public void IncrementPlayerScore(int amt)
     {
         if (IsOwner)
         {
             m_Score.Value = new PlayerScoreData()
             {
-                ID = (ulong)m_LocalClientID,
+                ID = (ulong)LocalClientID,
                 Score = m_Score.Value.Score + amt
             };
         }
