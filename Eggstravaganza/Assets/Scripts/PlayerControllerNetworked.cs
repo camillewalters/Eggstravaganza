@@ -171,7 +171,10 @@ public class PlayerControllerNetworked : NetworkBehaviour
         {
             Debug.Log("entering server rpc section");
             // PickUpEggServerRpc();
-            // GameNetwork.PickUpEggOnPlayer();
+            GameManager.Instance.GameNetwork.PickUpEggOnPlayerServerRpc(
+                gameObject.GetComponent<PlayerScoreNetwork>().m_Id.Value,
+                eggToBePickedUp.GetComponent<EggBehaviorNetworked>().eggId
+                );
         }
     }
 
