@@ -32,4 +32,10 @@ public class EggBehavior: MonoBehaviour
             droppedBy = null;
         }
     }
+
+    public override string ToString()
+    {
+        return $"EggBehavior on {gameObject.name} with value {value}, thrown by {thrownBy}, dropped by {droppedBy}, " +
+               $"isBeingHeld = {isBeingHeld}, isBeingThrown = {isBeingThrown}";
+    }
 }

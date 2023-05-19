@@ -192,4 +192,9 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(stunTime);
         isStunned = false;
     }
+
+    public override string ToString()
+    {
+        return $"PlayerController for ID {GetComponent<PlayerScoreNetwork>().LocalClientID}";
+    }
 }

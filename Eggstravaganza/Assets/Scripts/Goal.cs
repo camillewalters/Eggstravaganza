@@ -1,26 +1,56 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
-public class Goal : MonoBehaviour
+public class Goal : NetworkBehaviour
 {
+    ParticleSystem m_ParticleSystem;
+    
+    // [SerializeField]
+    // GameDataScriptableObject GameData;
+    
     // TODO: Ensure the player matches their goals, hardcoded for goals currently
     [SerializeField]
     int goalId;
 
     PlayerScoreNetwork m_Scorer;
 
+    // readonly NetworkVariable<PlayerScoreData> m_Score = new(writePerm: NetworkVariableWritePermission.Owner);
+
+    void Awake()
+    {
+        m_ParticleSystem = GetComponentInChildren<ParticleSystem>();
+        // m_Score.OnValueChanged += OnScoreUpdate;
+    }
+    
+    // void OnScoreUpdate(PlayerScoreData _, PlayerScoreData next)
+    // {
+    //     if (!IsOwner)
+    //     {
+    //         GameData.UpdatePlayerScore(next);
+    //     }
+    // }
+
     public void ActivateGoal(PlayerScoreNetwork player)
     {
-        gameObject.SetActive(true);
+        Debug.Log($"Owner {OwnerClientId} or is owned by server {IsOwnedByServer} or is server {IsServer} or is client {IsClient}");
+        
+        // gameObject.SetActive(true);
         m_Scorer = player;
         
-        // TODO: take goal away completely if no player
+        // SetGoalServerRpc((ulong)player.LocalClientID);
     }
+    
+    // [ServerRpc]
+    // private void SetGoalServerRpc(ulong id) {
+    //     GetComponent<NetworkObject>().ChangeOwnership(id);
+    // }
 
     void OnTriggerEnter(Collider other)
     {
         var egg = other.GetComponent<EggBehavior>();
         if (egg != null)
         {
+            Debug.Log(egg);
             PlayerController whoThrew = null;
             if (egg.thrownBy != null)
             {
@@ -35,12 +65,36 @@ public class Goal : MonoBehaviour
             {
                 whoThrew.eggInventory.Remove(egg.gameObject);
             }
+
+            if (egg.value > 0)
+            {
+                Confetti();
+            }
             
+            // IncrementPlayerScore(egg.value);
             m_Scorer.IncrementPlayerScore(egg.value);
             
             Destroy(egg);
         }
+        else
+        {
+            Debug.Log("no egg");
+        }
     }
+
+    // void IncrementPlayerScore(int amt)
+    // {
+    //     Debug.Log($"Calling IncrementPlayerScore with {amt} points, IsOwner = {IsOwner}, IsServer = {IsServer}, IsClient = {IsClient}");
+    //     if (IsOwner) // Does this need to explicitly be client?
+    //     {
+    //         m_Score.Value = new PlayerScoreData()
+    //         {
+    //             ID = goalId,
+    //             Score = m_Score.Value.Score + amt
+    //         };
+    //     }
+    //     GameData.UpdatePlayerScore(m_Score.Value);
+    // }
 
     // void OnTriggerEnter(Collider other)
     // {
@@ -72,4 +126,22 @@ public class Goal : MonoBehaviour
     //     // Add score
     //     playerScoreNetwork.IncrementPlayerScore(score);
     // }
+    
+    // public struct PlayerScoreData : INetworkSerializable
+    // {
+    //     internal ulong ID;
+    //     internal float Score;
+    //     
+    //     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    //     {
+    //         serializer.SerializeValue(ref ID);
+    //         serializer.SerializeValue(ref Score);
+    //     }
+    // }
+    
+    public void Confetti()
+    {
+        m_ParticleSystem.Stop();
+        m_ParticleSystem.Play();
+    }
 }

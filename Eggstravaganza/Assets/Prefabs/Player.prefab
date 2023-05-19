@@ -509,7 +509,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f19ab7cded48282b90e8b17fc8d0829, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GoalPrefabs:
+  - {fileID: 8784560919900146445, guid: 3bafad3194d30e3608a9147c5dc68560, type: 3}
+  - {fileID: 3686587581612770782, guid: 0123fc241828e725992bb753bc5fa1a7, type: 3}
+  - {fileID: 7190499865935020875, guid: cbb7994f0e5cc2f8cb1c42fcb5256759, type: 3}
+  - {fileID: 6569648295106887223, guid: c571c7d8b12984af0bb6a094e9f32efb, type: 3}
   GameData: {fileID: 11400000, guid: 610a9111475b5b030a18afcee12ac774, type: 2}
+  LocalClientID: -1
 --- !u!114 &6475088276085551756
 MonoBehaviour:
   m_ObjectHideFlags: 0

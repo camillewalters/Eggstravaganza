@@ -27,7 +27,9 @@ public class GameDataScriptableObject : ScriptableObject, ISerializationCallback
     public void OnBeforeSerialize() { }
 
     public void UpdatePlayerScore(PlayerScoreNetwork.PlayerScoreData scoreData)
+    // public void UpdatePlayerScore(Goal.PlayerScoreData scoreData)
     {
+        Debug.Log($"Update player {scoreData.ID} score to {scoreData.Score}");
         var id = (int)scoreData.ID;
         Players[id].Score = (int)scoreData.Score;
     }

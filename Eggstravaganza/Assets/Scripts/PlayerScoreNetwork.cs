@@ -6,6 +6,9 @@ using UnityEngine;
 public class PlayerScoreNetwork : NetworkBehaviour
 {
     [SerializeField]
+    GameObject[] GoalPrefabs;
+    
+    [SerializeField]
     GameDataScriptableObject GameData;
 
     readonly NetworkVariable<PlayerScoreData> m_Score = new(writePerm: NetworkVariableWritePermission.Owner);
@@ -40,7 +43,6 @@ public class PlayerScoreNetwork : NetworkBehaviour
         
         m_Prefabs = Resources.LoadAll<GameObject>("Hats");
         m_Id.Value = -1;
-        m_Score.OnValueChanged += OnScoreUpdate;
         m_Id.OnValueChanged += OnIdUpdate;
     }
 
@@ -48,17 +50,9 @@ public class PlayerScoreNetwork : NetworkBehaviour
         m_Id.OnValueChanged -= OnIdUpdate;
     }
 
-    private void OnIdUpdate(int prev, int next) {
-        AssignHat(next);
-        AssignGoal(next);
-    }
-
-    void OnScoreUpdate(PlayerScoreData _, PlayerScoreData next)
+    private void OnIdUpdate(int prev, int next)
     {
-        if (!IsOwner)
-        {
-            GameData.UpdatePlayerScore(next);
-        }
+        AssignLocalPlayer(next);
     }
 
     void OnPlayerRegistered(PlayerRegisterData _, PlayerRegisterData next)
@@ -85,7 +79,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
         }
         else
         {
-            AssignHat(m_Id.Value);
+            AssignLocalPlayer(m_Id.Value);
         }
     }
 
@@ -147,7 +141,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
             IncrementPlayerScore(1);
         }
     }
-    
+
     public void IncrementPlayerScore(int amt)
     {
         if (IsOwner)
@@ -160,15 +154,37 @@ public class PlayerScoreNetwork : NetworkBehaviour
         }
         GameData.UpdatePlayerScore(m_Score.Value);
     }
-
-    void AssignHat(int index)
+    
+    void AssignLocalPlayer(int index)
     {
+        if (index < 0)
+        {
+            return;
+        }
+
+        Debug.Log($"Calling AssignLocalPlayer with index {index}");
         Instantiate(m_Prefabs[index], transform.GetChild(3), true);
+        if (IsOwner)
+        {
+            SpawnGoalServerRpc(LocalClientID);
+        }
+        else
+        {
+            var obj = NetworkManager.ConnectedClients[(ulong)index].PlayerObject;
+            Debug.Log($"??? was not owner in assign local player. need to spawn (or assign) goal? for {obj}");
+        //     var goal = GameObject.Find($"Goal {LocalClientID}");
+        //     goal.GetComponent<Goal>().ActivateGoal(this);
+        }
     }
-
-    void AssignGoal(int index)
+    
+    [ServerRpc]
+    private void SpawnGoalServerRpc(int index)
     {
-        GameManager.Instance.Goals[index].ActivateGoal(this);   
+        Debug.Log($"calling spawn goal server rpc with index {index}");
+        var goal = Instantiate(GoalPrefabs[index]);
+        goal.name = $"Goal {index}";
+        goal.GetComponent<NetworkObject>().Spawn();
+        goal.GetComponent<Goal>().ActivateGoal(this);
     }
 
     public struct PlayerScoreData : INetworkSerializable
