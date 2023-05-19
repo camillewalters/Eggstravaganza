@@ -66,6 +66,11 @@ public class ServerStartup : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        Dispose();
+    }
+
     private void StartServer()
     {
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetConnectionData(k_InternalServerIp, m_ServerPort);
@@ -219,9 +224,9 @@ public class ServerStartup : MonoBehaviour
             m_LocalBackfillTicket = await MatchmakerService.Instance.ApproveBackfillTicketAsync(m_LocalBackfillTicket.Id);
             if (!NeedsPlayers())
             {
-                await MatchmakerService.Instance.DeleteBackfillTicketAsync(m_LocalBackfillTicket.Id);
-                m_LocalBackfillTicket = null;
-                m_Backfilling = false;
+#pragma warning disable 4014
+                StopBackfill();
+#pragma warning restore 4014
                 return;
             }
 
@@ -244,8 +249,24 @@ public class ServerStartup : MonoBehaviour
         return NetworkManager.Singleton.ConnectedClients.Count < k_MaxPlayers;
     }
 
+    public async Task StopBackfill()
+    {
+        if (!m_Backfilling)
+        {
+            Debug.LogError("Can't stop backfilling before we start.");
+            return;
+        }
+
+        await MatchmakerService.Instance.DeleteBackfillTicketAsync(m_LocalBackfillTicket.Id);
+        m_Backfilling = false;
+        m_LocalBackfillTicket.Id = null;
+    }
+
     private void Dispose()
     {
+#pragma warning disable 4014
+        StopBackfill();
+#pragma warning restore 4014
         m_ServerCallbacks.Allocate -= OnMultiplayAllocation;
     }
 }

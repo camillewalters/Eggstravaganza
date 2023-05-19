@@ -24,7 +24,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
     
     public int LocalClientID = -1;
     GameObject[] m_Prefabs;
-    public readonly NetworkVariable<int> m_Id = new();
+    public readonly NetworkVariable<int> m_Id = new(value:-1, writePerm: NetworkVariableWritePermission.Server);
     
     void Awake()
     {
@@ -39,7 +39,6 @@ public class PlayerScoreNetwork : NetworkBehaviour
         }
         
         m_Prefabs = Resources.LoadAll<GameObject>("Hats");
-        m_Id.Value = -1;
         m_Score.OnValueChanged += OnScoreUpdate;
         m_Id.OnValueChanged += OnIdUpdate;
     }
