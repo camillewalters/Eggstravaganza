@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PriyankaSceneMerged.unity
     guid: 14e922fa0be78d34a8310063c9c8de92
+  - enabled: 1
+    path: Assets/TestNetcodeExample/Scenes/Main.unity
+    guid: aa4f83ed684ce5f4caeddd339260ac24
+  - enabled: 1
+    path: Assets/Scenes/TestNetworkedPlayerMovement.unity
+    guid: 732bc565dec4dc145ad1b8bb63d1fbee
   m_configObjects: {}

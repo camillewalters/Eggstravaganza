@@ -7,8 +7,9 @@ public class EggBehavior: MonoBehaviour
 
     Rigidbody rb;
 
-    public PlayerController thrownBy;
-    public PlayerController droppedBy;
+    public Object thrownBy;
+    //public PlayerControllerNetworked thrownByNet;
+    public Object droppedBy;
 
     private void Awake()
     {
