@@ -986,7 +986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0787ab4e44c874418a43854ceb4d136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nameInputField: {fileID: 0}
+  nameInputField: {fileID: 2052705668}
   startGameButton: {fileID: 950060519}
 --- !u!1 &96179020
 GameObject:
