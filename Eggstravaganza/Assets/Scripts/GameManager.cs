@@ -48,6 +48,10 @@ public class GameManager : NetworkBehaviour
     public void StartGame()
     {
         UIManager.StartGame();
+        foreach (var player in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            player.GetComponent<PlayerController>().StartGame();
+        }
     }
 
     public void EndRound()

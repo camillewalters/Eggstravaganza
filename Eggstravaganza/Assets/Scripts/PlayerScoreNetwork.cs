@@ -7,7 +7,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
 {
     [SerializeField]
     GameDataScriptableObject GameData;
-
+    
     readonly NetworkVariable<PlayerScoreData> m_Score = new(writePerm: NetworkVariableWritePermission.Owner);
 
     // TODO: why can't I serialize an array easily omg sorry
@@ -163,6 +163,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
     void AssignHat(int index)
     {
         Instantiate(m_Prefabs[index], transform.GetChild(3), true);
+        transform.GetComponent<PlayerController>().AssignPlayerText(index);
     }
 
     public struct PlayerScoreData : INetworkSerializable
