@@ -15,6 +15,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] 
     UIManager UIManager;
 
+    public Goal[] Goals;
+
     void Awake()
     {
         if (m_Instance != null && m_Instance != this)

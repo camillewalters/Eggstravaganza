@@ -50,6 +50,7 @@ public class PlayerScoreNetwork : NetworkBehaviour
 
     private void OnIdUpdate(int prev, int next) {
         AssignHat(next);
+        AssignGoal(next);
     }
 
     void OnScoreUpdate(PlayerScoreData _, PlayerScoreData next)
@@ -163,6 +164,11 @@ public class PlayerScoreNetwork : NetworkBehaviour
     void AssignHat(int index)
     {
         Instantiate(m_Prefabs[index], transform.GetChild(3), true);
+    }
+
+    void AssignGoal(int index)
+    {
+        GameManager.Instance.Goals[index].ActivateGoal(this);   
     }
 
     public struct PlayerScoreData : INetworkSerializable

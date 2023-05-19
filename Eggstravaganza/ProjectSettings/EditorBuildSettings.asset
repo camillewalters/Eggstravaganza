@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PriyankaSceneMerged.unity
     guid: 14e922fa0be78d34a8310063c9c8de92
+  - enabled: 1
+    path: Assets/Scenes/AmandaGoalScene.unity
+    guid: 31f87054629e096b7aba7abbf61e5cae
   m_configObjects: {}
