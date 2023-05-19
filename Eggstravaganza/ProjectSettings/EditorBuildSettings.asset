@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestNetworkedPlayerMovement.unity
     guid: 732bc565dec4dc145ad1b8bb63d1fbee
+  - enabled: 1
+    path: Assets/Scenes/NetworkedPlayer.unity
+    guid: a7407188e8c24d740946e7b35af9443e
   m_configObjects: {}

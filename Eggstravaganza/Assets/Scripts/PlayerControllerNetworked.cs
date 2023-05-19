@@ -67,16 +67,18 @@ public class PlayerControllerNetworked : NetworkBehaviour
 
     public void HandleEggHitboxCollision(Collider other)
     {
-        EggBehavior eggBehavior = other.gameObject.GetComponent<EggBehavior>();
+        var eggBehavior = other.gameObject.GetComponent<EggBehaviorNetworked>();
         if (eggBehavior != null)
         {
             if (!eggBehavior.isBeingHeld && !eggBehavior.isBeingThrown && eggBehavior.droppedBy != this)
             {
+                Debug.Log("pick up");
                 PickUpEgg(other.gameObject);
                 eggBehavior.isBeingHeld = true;
             }
             if (eggBehavior.isBeingThrown && eggBehavior.thrownBy != this)
             {
+                Debug.Log("lose");
                 StartCoroutine(LoseEgg());
             }
         }
@@ -150,7 +152,9 @@ public class PlayerControllerNetworked : NetworkBehaviour
         }
 
     }
-
+    
+    GameObject eggToBePickedUpGlobal;
+    
     private void PickUpEgg(GameObject eggToBePickedUp)
     {
         var eggRb = eggToBePickedUp.GetComponent<Rigidbody>();
@@ -159,8 +163,21 @@ public class PlayerControllerNetworked : NetworkBehaviour
         eggInventory.Add(eggToBePickedUp);
 
         eggToBePickedUp.transform.position = NextEggHoldLocation();
+        eggToBePickedUpGlobal = eggToBePickedUp;
 
-        eggToBePickedUp.transform.parent = gameObject.transform;
+        // eggToBePickedUp.transform.parent = gameObject.transform;
+        if (IsOwner)
+        {
+            Debug.Log("entering server rpc section");
+            PickUpEggServerRpc();
+        }
+    }
+
+    [ServerRpc]
+    void PickUpEggServerRpc()
+    {
+        Debug.Log($"picking up from server {eggToBePickedUpGlobal} {eggToBePickedUpGlobal.GetInstanceID()}");
+        // eggToBePickedUpGlobal.transform.parent = gameObject.transform;
     }
 
     private Vector3 NextEggHoldLocation()

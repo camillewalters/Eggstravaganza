@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class HitboxController : MonoBehaviour
 {
-    PlayerController playerController;
+    PlayerControllerNetworked playerController;
     // Start is called before the first frame update
     void Start()
     {
-        playerController  = GetComponentInParent<PlayerController>();
+        playerController  = GetComponentInParent<PlayerControllerNetworked>();
     }
 
     // Update is called once per frame
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log("in trigger enter of hit box ");
         playerController.HandleEggHitboxCollision(other);
     }
 }

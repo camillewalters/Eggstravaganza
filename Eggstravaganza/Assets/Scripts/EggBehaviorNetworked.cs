@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Unity.Netcode;
+using UnityEditor.Rendering;
+using Object = UnityEngine.Object;
 
 public class EggBehaviorNetworked: NetworkBehaviour
 {
@@ -19,7 +22,7 @@ public class EggBehaviorNetworked: NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (!IsOwner) Destroy(this);
+        // if (!IsOwner) Destroy(this);
     }
 
     private void Update()

@@ -71,7 +71,7 @@ public class EggSpawner : MonoBehaviour
     /*
     public float timeRemaining;
     public bool timerIsRunning;
-    const float k_SpawnInterval = 20;
+    const float k_SpawnInterval = 10;
 
     void Start()
     {
@@ -89,7 +89,7 @@ public class EggSpawner : MonoBehaviour
             }
             else
             {
-                SpawnEgg();
+                SpawnEgg(ChooseSpawnPosition(), ChooseEggToSpawn());
                 timeRemaining = 0;
                 timerIsRunning = false;
             }
