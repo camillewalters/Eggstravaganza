@@ -157,36 +157,13 @@ public class PlayerScoreNetwork : NetworkBehaviour
     
     void AssignLocalPlayer(int index)
     {
-        if (index < 0)
-        {
-            return;
-        }
-
         Debug.Log($"Calling AssignLocalPlayer with index {index}");
         Instantiate(m_Prefabs[index], transform.GetChild(3), true);
-        if (IsOwner)
-        {
-            SpawnGoalServerRpc(LocalClientID);
-        }
-        else
-        {
-            var obj = NetworkManager.ConnectedClients[(ulong)index].PlayerObject;
-            Debug.Log($"??? was not owner in assign local player. need to spawn (or assign) goal? for {obj}");
-        //     var goal = GameObject.Find($"Goal {LocalClientID}");
-        //     goal.GetComponent<Goal>().ActivateGoal(this);
-        }
-    }
-    
-    [ServerRpc]
-    private void SpawnGoalServerRpc(int index)
-    {
-        Debug.Log($"calling spawn goal server rpc with index {index}");
         var goal = Instantiate(GoalPrefabs[index]);
         goal.name = $"Goal {index}";
-        goal.GetComponent<NetworkObject>().Spawn();
         goal.GetComponent<Goal>().ActivateGoal(this);
     }
-
+    
     public struct PlayerScoreData : INetworkSerializable
     {
         internal ulong ID;
