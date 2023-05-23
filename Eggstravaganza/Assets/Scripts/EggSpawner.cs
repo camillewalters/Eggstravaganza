@@ -30,12 +30,11 @@ public class EggSpawner : MonoBehaviour
         CalculateWeights();
     }
 
-    public EggBehaviorNetworked SpawnEgg(Vector3 spawnPosition, int index = 0, int id = 0)
+    public EggBehaviorNetworked SpawnEgg(Vector3 spawnPosition, int index = 0)
     {
         var currentEggToSpawn = eggs[index];
         var egg = Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
-        egg.GetComponent<EggBehaviorNetworked>().eggId = id;
-        
+
         Debug.Log($"Spawned {currentEggToSpawn.prefab.name}!");
         return egg.GetComponent<EggBehaviorNetworked>();
     }

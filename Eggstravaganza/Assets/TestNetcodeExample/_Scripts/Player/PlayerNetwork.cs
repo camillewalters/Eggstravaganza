@@ -32,7 +32,6 @@ public class PlayerNetwork : NetworkBehaviour
         }
     }
 
-
     private struct PlayerNetworkData : INetworkSerializable
     {
         private float m_XPos;

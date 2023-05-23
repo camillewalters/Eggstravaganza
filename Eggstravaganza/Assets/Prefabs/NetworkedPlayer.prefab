@@ -489,6 +489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameData: {fileID: 11400000, guid: 610a9111475b5b030a18afcee12ac774, type: 2}
+  LocalClientID: -1
 --- !u!114 &6475088276085551756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,6 +571,8 @@ MonoBehaviour:
   throwForwardFactor: 20
   throwUpwardFactor: 5
   dropForwardFactor: -3
+  m_DisplayEgg: {fileID: 2788923454540253015, guid: 16398907edc694de8a08d6732bee45ff,
+    type: 3}
 --- !u!1 &2748282422418694191
 GameObject:
   m_ObjectHideFlags: 0

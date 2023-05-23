@@ -27,9 +27,6 @@ public class GameNetwork : NetworkBehaviour
     float maxEggSpawnTime = 8;
     float m_TimeRemaining;
 
-    int m_EggCounter = 0;
-    List<EggBehaviorNetworked> m_Eggs = new List<EggBehaviorNetworked>();
-
     void Start()
     {
         m_EggSpawner = this.gameObject.GetComponent<EggSpawner>();
@@ -182,13 +179,11 @@ public class GameNetwork : NetworkBehaviour
             // Spawn chosen egg
             RequestSpawnEggServerRpc();
             SpawnEggClientRpc();
-            var spawnedEggBehaviour = m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value, m_EggCounter);
-            m_Eggs.Add(spawnedEggBehaviour);
+            var spawnedEggBehaviour = m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
     
             // Choose next egg to spawn and its position
             m_EggToSpawnIndex.Value = m_EggSpawner.ChooseEggToSpawn();
             m_EggSpawnPosition.Value = m_EggSpawner.ChooseSpawnPosition();
-            m_EggCounter += 1;
         }
     }
 
@@ -203,18 +198,7 @@ public class GameNetwork : NetworkBehaviour
     {
         if (!IsServer)
         {
-            var spawnedEggBehaviour = m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value, m_EggCounter);
-            m_Eggs.Add(spawnedEggBehaviour);
-            m_EggCounter += 1;
+            var spawnedEggBehaviour = m_EggSpawner.SpawnEgg(m_EggSpawnPosition.Value, m_EggToSpawnIndex.Value);
         }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void PickUpEggOnPlayerServerRpc(int playerId, int eggId)
-    {
-        Debug.Log($"Called by {playerId} for {eggId} which is {m_Eggs[eggId]}");
-        var player = NetworkManager.Singleton.ConnectedClients[(ulong) playerId].PlayerObject;
-        Debug.Log($"helo maybe we found the player {player.name}");
-        m_Eggs[eggId].transform.parent = player.transform;
     }
 }

@@ -1,30 +1,24 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Unity.Netcode;
-using UnityEditor.Rendering;
-using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
 public class EggBehaviorNetworked: NetworkBehaviour
 {
-    public int eggId;
-    
-	public bool isBeingHeld = false;
-	public bool isBeingThrown = false;
+    public bool isBeingHeld = false;
+    public bool isBeingThrown = false;
 
     Rigidbody rb;
 
     public Object thrownBy;
-    //public PlayerControllerNetworked thrownByNet;
     public Object droppedBy;
+
+    [SerializeField, Tooltip("The egg model that will be displayed in the player's hand")]
+    private GameObject m_DisplayEgg;
+    public GameObject DisplayEgg => m_DisplayEgg;
+
     private void Awake()
     {
          rb = GetComponent<Rigidbody>();
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        // if (!IsOwner) Destroy(this);
     }
 
     private void Update()
