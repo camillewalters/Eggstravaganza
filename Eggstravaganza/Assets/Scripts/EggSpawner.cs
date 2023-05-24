@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -29,12 +30,13 @@ public class EggSpawner : MonoBehaviour
         CalculateWeights();
     }
 
-    public void SpawnEgg(Vector3 spawnPosition, int index = 0)
+    public EggBehaviorNetworked SpawnEgg(Vector3 spawnPosition, int index = 0)
     {
         var currentEggToSpawn = eggs[index];
-        Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
-        
+        var egg = Instantiate(currentEggToSpawn.prefab, spawnPosition, Quaternion.identity);
+
         Debug.Log($"Spawned {currentEggToSpawn.prefab.name}!");
+        return egg.GetComponent<EggBehaviorNetworked>();
     }
 
     public Vector3 ChooseSpawnPosition()
@@ -71,7 +73,7 @@ public class EggSpawner : MonoBehaviour
     /*
     public float timeRemaining;
     public bool timerIsRunning;
-    const float k_SpawnInterval = 20;
+    const float k_SpawnInterval = 10;
 
     void Start()
     {
@@ -89,7 +91,7 @@ public class EggSpawner : MonoBehaviour
             }
             else
             {
-                SpawnEgg();
+                SpawnEgg(ChooseSpawnPosition(), ChooseEggToSpawn());
                 timeRemaining = 0;
                 timerIsRunning = false;
             }

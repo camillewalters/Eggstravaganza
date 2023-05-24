@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
+using Unity.Netcode;
+using Object = UnityEngine.Object;
 
-public class EggBehavior: MonoBehaviour
+public class EggBehaviorNetworked: NetworkBehaviour
 {
-	public bool isBeingHeld = false;
-	public bool isBeingThrown = false;
+    public bool isBeingHeld = false;
+    public bool isBeingThrown = false;
 
     Rigidbody rb;
 
     public Object thrownBy;
-    //public PlayerControllerNetworked thrownByNet;
     public Object droppedBy;
 
-    [SerializeField]
-    public int value;
+    [SerializeField, Tooltip("The egg model that will be displayed in the player's hand")]
+    private GameObject m_DisplayEgg;
+    public GameObject DisplayEgg => m_DisplayEgg;
 
     private void Awake()
     {
@@ -22,6 +24,11 @@ public class EggBehavior: MonoBehaviour
     private void Update()
     {
         rb.detectCollisions = !isBeingHeld;
+
+        if (isBeingHeld)
+        {
+            Debug.Log("following goph");
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
