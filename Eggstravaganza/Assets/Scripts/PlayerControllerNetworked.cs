@@ -70,13 +70,15 @@ public class PlayerControllerNetworked : NetworkBehaviour
         var eggBehavior = other.gameObject.GetComponent<EggBehaviorNetworked>();
         if (eggBehavior != null)
         {
+            Debug.Log(
+                $"Collided with egg, being thrown? {eggBehavior.isBeingThrown}, dropped by {eggBehavior.droppedBy}");
             if (!eggBehavior.isBeingHeld && !eggBehavior.isBeingThrown && eggBehavior.droppedBy != this)
             {
                 Debug.Log("pick up");
                 PickUpEgg(other.gameObject);
                 eggBehavior.isBeingHeld = true;
             }
-            if (eggBehavior.isBeingThrown && eggBehavior.thrownBy != this)
+            else if (eggBehavior.isBeingThrown && eggBehavior.thrownBy != this)
             {
                 Debug.Log("lose");
                 StartCoroutine(LoseEgg());
@@ -164,8 +166,7 @@ public class PlayerControllerNetworked : NetworkBehaviour
         eggRb.velocity = m_Rigidbody.transform.forward * m_ThrowForwardFactor + m_Rigidbody.transform.up * m_ThrowUpwardFactor;
         m_EggInventory.Remove(eggToThrow);
 
-        EggBehavior eggBehavior = eggToThrow.GetComponent<EggBehavior>();
-        if (eggBehavior == null) return;
+        EggBehaviorNetworked eggBehavior = eggToThrow.GetComponent<EggBehaviorNetworked>();
         eggBehavior.isBeingThrown = true;
         eggBehavior.isBeingHeld = false;
         eggBehavior.thrownBy = this;
@@ -198,15 +199,18 @@ public class PlayerControllerNetworked : NetworkBehaviour
         //remove egg from inventory using LIFO
         if (m_EggInventory.Count > 0)
         {
-            GameObject eggToRemove = m_EggInventory[m_EggInventory.Count - 1];
-            // eggToRemove.transform.parent = null;//unparent
+            GameObject eggToRemove = m_EggInventory[^1];
+            eggToRemove.SetActive(true);
             m_EggInventory.Remove(eggToRemove);
+            
+            Destroy(m_DisplayEggInventory[^1]);
+            m_DisplayEggInventory.RemoveAt(m_DisplayEggInventory.Count - 1);
 
             var eggRb = eggToRemove.GetComponent<Rigidbody>();
             eggRb.velocity = body.transform.forward * m_DropForwardFactor;//falls backwards with a bit of velocity
             eggRb.isKinematic = false;
 
-            EggBehavior eggBehavior = eggToRemove.GetComponent<EggBehavior>();
+            EggBehaviorNetworked eggBehavior = eggToRemove.GetComponent<EggBehaviorNetworked>();
             eggBehavior.isBeingHeld = false;
             eggBehavior.droppedBy = this;
         }

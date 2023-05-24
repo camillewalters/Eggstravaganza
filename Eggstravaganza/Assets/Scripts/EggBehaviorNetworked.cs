@@ -25,10 +25,10 @@ public class EggBehaviorNetworked: NetworkBehaviour
     {
         rb.detectCollisions = !isBeingHeld;
 
-        if (isBeingHeld)
-        {
-            Debug.Log("following goph");
-        }
+        // if (isBeingHeld)
+        // {
+            // Debug.Log("following goph");
+        // }
     }
 
     private void OnCollisionEnter(Collision collision)

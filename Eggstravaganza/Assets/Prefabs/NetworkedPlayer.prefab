@@ -563,16 +563,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4362e682693c4f943ae6225fcd0d3f30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 80
-  lerpParam: 10
+  m_Speed: 80
+  m_LerpParam: 10
   body: {fileID: 3361834574544056098}
-  eggHitbox: {fileID: 1416857086}
-  eggInventory: []
-  throwForwardFactor: 20
-  throwUpwardFactor: 5
-  dropForwardFactor: -3
-  m_DisplayEgg: {fileID: 2788923454540253015, guid: 16398907edc694de8a08d6732bee45ff,
-    type: 3}
+  m_ThrowForwardFactor: 20
+  m_ThrowUpwardFactor: 1
+  m_DropForwardFactor: -3
 --- !u!1 &2748282422418694191
 GameObject:
   m_ObjectHideFlags: 0
