@@ -426,6 +426,7 @@ GameObject:
   - component: {fileID: 7110053057616724690}
   - component: {fileID: 6012291774966510661}
   - component: {fileID: 7921968675101052799}
+  - component: {fileID: 3313324223503784112}
   m_Layer: 0
   m_Name: NetworkedPlayer
   m_TagString: Untagged
@@ -563,16 +564,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4362e682693c4f943ae6225fcd0d3f30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 80
-  lerpParam: 10
+  m_Speed: 80
+  m_LerpParam: 10
   body: {fileID: 3361834574544056098}
-  eggHitbox: {fileID: 1416857086}
-  eggInventory: []
-  throwForwardFactor: 20
-  throwUpwardFactor: 5
-  dropForwardFactor: -3
-  m_DisplayEgg: {fileID: 2788923454540253015, guid: 16398907edc694de8a08d6732bee45ff,
-    type: 3}
+  m_ThrowForwardFactor: 20
+  m_ThrowUpwardFactor: 5
+  m_DropForwardFactor: -3
+--- !u!114 &3313324223503784112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2732684518155842968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512120197ffc0a06d98bc954e515ba2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParticleSystem: {fileID: 0}
 --- !u!1 &2748282422418694191
 GameObject:
   m_ObjectHideFlags: 0
