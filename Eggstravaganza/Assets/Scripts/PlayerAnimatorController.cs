@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class PlayerAnimatorController : MonoBehaviour
+public class PlayerAnimatorController : NetworkBehaviour
 {
     [SerializeField]
     ParticleSystem ParticleSystem;
@@ -23,6 +24,8 @@ public class PlayerAnimatorController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!IsOwner) return;
+        
         var isMoving = m_Rigidbody.velocity != Vector3.zero;
         m_Animator.SetBool(IsWalking, isMoving);
     }
